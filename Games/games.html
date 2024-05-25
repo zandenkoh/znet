@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZNet</title>
+  <link rel="icon" type="image/png" href="../atom-icon.png">
+  <link rel="stylesheet" href="games.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
+    <header>
+        <a class="header-title" href="../index.html">ZNet</a>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search games..." autocomplete="off">
+        </div>
+    </header>
+
+    <!--<div id="sidebar" class="sidebar">
+        <div class="sidebar-user">
+          <div id="profile-circle" class="profile-circle">
+            <span id="profile-letter"></span>
+          </div>
+          <div class="profile-name" id="profile-name"></div>
+        </div>
+        <div class="sidebar-items">
+          <div class="chat" id="chat">
+            <i class="fa-solid fa-house"></i>
+            <span class="text">Home</span>
+          </div>
+          <div class="poll" id="poll">
+            <i class="fa-solid fa-square-poll-horizontal"></i>
+            <span class="text">Polls</span>
+          </div>
+          <div class="meet" id="meet">
+            <i class="fa-solid fa-trophy"></i>
+            <span class="text">Games</span>
+          </div>
+          <div class="music" id="music" style="display: none;">
+            <i class="fa-regular fa-circle-play"></i>
+            <span class="text">Music</span>
+          </div>
+          <br>
+          <hr class="music-to-feedback-line">
+          <br>
+          <div class="about" id="about">
+            <i class="fa-solid fa-chalkboard"></i>
+            <span class="text">About</span>
+          </div>
+          <div class="feedback" id="feedback">
+            <i class="fa-regular fa-message"></i>
+            <span class="text">Feedback</span>
+          </div>
+        </div>
+        <div style="display: none;" class="dark-mode">
+            <i class="fa-solid fa-circle-notch" id="light_mode"></i>
+        </div>
+    </div>-->
+    <div class="main" id="main">
+        <div class="tabs">
+            <button class="button-all">All</button>
+            <button>Action</button>
+            <button>Multiplayer</button>
+            <button>3D</button>
+            <button>Airport Madness</button>
+            <button>Adventure</button>
+            <button>2D</button>
+            <button>RPG</button>
+            <button>Shooter</button>
+            <button>Strategy</button>
+            <button>Sports</button>
+            <button>Simulation</button>
+            <button>Puzzle</button>
+            <button>Platformer</button>
+            <button>Survival</button>
+            <button>Horror</button>
+            <button>Stealth</button>
+            <button>Open World</button>
+            <button>Racing</button>
+            <button>Fighting</button>
+            <button>MMORPG</button>
+            <button>MOBA</button>
+            <button>Card</button>
+            <button>Party</button>
+            <button>Music</button>
+            <button>VR</button>
+            <button>RTS</button>
+            <button>Tactical</button>
+            <button>Space</button>
+            <button>Western</button>
+            <button>Mystery</button>
+            <button>Historical</button>
+            <button>Art</button>
+            <button>SciFi</button>
+            <button>Fantasy</button>
+            <button>War</button>
+            <button>Superhero</button>
+            <button>Crime</button>
+            <button>Comedy</button>
+            <button>Drama</button>
+            <button>Documentary</button>
+            <button>Mythology</button>
+            <button>Zombies</button>
+            <button>Cyberpunk</button>
+            <button>Steampunk</button>
+            <button>Medieval</button>
+            <button>Futuristic</button>
+            <button>Robots</button>
+            <button>Aliens</button>
+            <button>Travel</button>
+            <button>Time</button>
+            <button>Time Travel</button>
+            <button>Reality</button>
+            <button>Underwater</button>
+            
+        </div>
+        <div class="game-cards" id="gameContainer">
+            <a href="../index.html" class="game-card">
+                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/445770/header.jpg?t=1666671455" alt="Game 1">
+                <div class="game-card-content">
+                  <h3>Airport Madness 3</h3>
+                  <p class="description">Airport Madness 3 is an air traffic control game that involves runways and taxiways. You must strategically give takeoff and landing clearances to avoid midair collisions between commercial jets while moving them as fast as you can with no delays.</p>
+                  <div class="game-card-data">
+                    <span class="data">Big Fat Simulations Inc.</span>
+                    <span class="stars">| ★★★★☆</span>
+                  </div>
+                </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/2327720/ss_9ff993aa367c242d701c2bf52e37d21af6ed03a1.1920x1080.jpg?t=1708312698" alt="Game 1">
+                <div class="game-card-content">
+                  <h3>City Car Driving Simulator 2</h3>
+                  <p class="description">
+                    "City Car Driving Simulator 2" is a realistic driving game set in urban environments. With authentic vehicle handling and meticulously designed cityscapes, players can navigate traffic, hone driving skills, and explore virtual cities. It offers a lifelike experience for all skill levels.</p>
+                  <div class="game-card-data">
+                    <span class="data">Forward Development</span>
+                    <span class="stars">| ★★★★☆</span>
+                  </div>
+                </div>
+            </a>
+        
+            <a href="../index.html" class="game-card">
+                <img src="https://images.crazygames.com/games/super-star-car/coverundefined-1693302240873.png?auto=format,compress&q=75&cs=strip" alt="Game 1">
+                <div class="game-card-content">
+                  <h3>Super Star Car</h3>
+                  <p class="description">"Super Star Car" is a high-octane racing game where players compete in adrenaline-fueled races across various tracks, showcasing their driving skills and maneuvering through challenging obstacles. It has stunning graphics, responsive controls, and a variety of customizable cars.</p>
+                  <div class="game-card-data">
+                    <span class="data">SkyRocket Studios</span>
+                    <span class="stars">| ★★★★☆</span>
+                  </div>
+                </div>
+            </a>
+        
+            <a href="../index.html" class="game-card">
+                <img src="https://cdn2.spiele-umsonst.de/flash_thumb/boatinvasion.jpg" alt="Game 1">
+                <div class="game-card-content">
+                  <h3>Boat Invasion</h3>
+                  <p class="description">In this strategic challenge, players strategically deploy defensive towers to protect their castle stronghold from relentless enemy boat invasions. With each successful defense, earn resources to upgrade defenses and unlock powerful new towers. Utilise special abilities to thwart enemy advances and safeguard your territory in this intense strategic challenge</p>
+                  <div class="game-card-data">
+                    <span class="data">Aqua Dynamics</span>
+                    <span class="stars">| ★★★★☆</span>
+                  </div>
+                </div>
+            </a>
+        
+            <a href="https://zandenkoh.github.io/Collect/" class="game-card">
+                <img src="https://res.cloudinary.com/dzfwb0xu5/image/upload/v1648916705/gamedevshift.com/post-images/multiplayer-demo_ihjqo7.png" alt="Game 1">
+                <div class="game-card-content">
+                  <h3>Coin Craze: Multiplayer Mayhem</h3>
+                  <p class="description">This multiplayer game pits players against each other in a frantic race to collect coins scattered across dynamic levels. Strategise to outwit opponents, utilise power-ups, and navigate obstacles to amass the most coins within the time limit. Are you ready to dive into the frenzy of coin-collecting chaos?</p>
+                  <div class="game-card-data">
+                    <span class="data">ZNet Studios</span>
+                    <span class="stars">| ★★★★☆</span>
+                  </div>
+                </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://static.wikia.nocookie.net/gamia_gamepedia_en/images/f/fb/Pirate_Kings.png/revision/latest/scale-to-width-down/1200?cb=20210315185119" alt="Game 6">
+              <div class="game-card-content">
+                <h3>Pirate Kings</h3>
+                <p class="description">In "Pirate Kings," players build their islands, attack friends' islands, and steal gold to become the ultimate Pirate King. Spin the wheel to earn cash, attack, steal, and conquer to become the richest and most feared pirate in the seven seas.</p>
+                <div class="game-card-data">
+                  <span class="data">Jelly Button Games</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://m.media-amazon.com/images/I/81A9FtePrYL.png" alt="Game 7">
+              <div class="game-card-content">
+                <h3>Slither.io</h3>
+                <p class="description">"Slither.io" is a massively multiplayer browser game where players control a snake-like avatar, consuming multicolored pellets to grow in size. The objective is to become the longest snake on the server while avoiding other snakes. It's simple, addictive, and endlessly entertaining.</p>
+                <div class="game-card-data">
+                  <span class="data">Lowtech Studios</span>
+                  <span class="stars">| ★★★★★</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://images.crazygames.com/agario/20230719092731/agario-cover?auto=format,compress&q=75&cs=strip" alt="Game 8">
+              <div class="game-card-content">
+                <h3>Agar.io</h3>
+                <p class="description">"Agar.io" is an addictive multiplayer game where players control a cell in a petri dish-like world. The goal is to grow by consuming smaller cells while avoiding being consumed by larger ones. It's a simple yet highly competitive and engaging experience.</p>
+                <div class="game-card-data">
+                  <span class="data">Miniclip</span>
+                  <span class="stars">| ★★★★★</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://www.shellshock.io/img/previewImage_shellShockers.jpg" alt="Game 9">
+              <div class="game-card-content">
+                <h3>ShellShock.io</h3>
+                <p class="description">"ShellShock.io" is a multiplayer shooting game where players engage in intense tank battles. Customize your tank, join a team, and blast your opponents to smithereens using a variety of weapons and tactics. With fast-paced action and strategic gameplay, it's a must-play for shooter fans.</p>
+                <div class="game-card-data">
+                  <span class="data">Blue Wizard Digital</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://images.crazygames.com/diepio/20230629173952/diepio-cover?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop" alt="Game 10">
+              <div class="game-card-content">
+                <h3>Diep.io</h3>
+                <p class="description">"Diep.io" is a multiplayer tank battle game where players control a tank and shoot geometric shapes and other players to level up and upgrade their tank's stats. With various game modes and intense battles, it offers endless hours of addictive fun.</p>
+                <div class="game-card-data">
+                  <span class="data">Matheus Valadares</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://cdn6.aptoide.com/imgs/e/b/b/ebbdcfe26302ff65a40b3824c00b4239_fgraphic.png" alt="Game 11">
+              <div class="game-card-content">
+                <h3>Wormax.io</h3>
+                <p class="description">"Wormax.io" is a multiplayer snake game where players control a worm and compete against others to become the largest worm on the server. Collect food, grow in size, and use tactics to outmaneuver opponents in this addictive and fast-paced online experience.</p>
+                <div class="game-card-data">
+                  <span class="data">Elyland</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://images.crazygames.com/games/lordzio/cover-1669218725142.png?auto=format,compress&q=75&cs=strip" alt="Game 12">
+              <div class="game-card-content">
+                <h3>Lordz.io</h3>
+                <p class="description">"Lordz.io" is a multiplayer strategy game where players build armies, conquer new territories, and compete against other players in a medieval-themed world. With various units, upgrades, and tactics, it offers deep strategic gameplay and endless replayability.</p>
+                <div class="game-card-data">
+                  <span class="data">Spinbot Studio</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://i.ytimg.com/vi/K54XP8_F6LA/maxresdefault.jpg" alt="Game 13">
+              <div class="game-card-content">
+                <h3>Skribbl.io</h3>
+                <p class="description">"Skribbl.io" is a multiplayer drawing and guessing game where players take turns drawing a word while others guess what it is. With simple mechanics and endless possibilities, it's a fun and creative way to spend time with friends online.</p>
+                <div class="game-card-data">
+                  <span class="data">ticedev</span>
+                  <span class="stars">| ★★★★★</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop" alt="Game 14">
+              <div class="game-card-content">
+                <h3>Basketball Stars</h3>
+                <p class="description">"Basketball Stars" is a fast-paced multiplayer basketball game where players can challenge opponents in one-on-one duels or team up in multiplayer tournaments. With realistic physics and smooth controls, it offers an authentic basketball experience on your browser.</p>
+                <div class="game-card-data">
+                  <span class="data">Miniclip</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://images.crazygames.com/games/krunker-io/cover-1591336739727.png?auto=format,compress&q=75&cs=strip" alt="Game 15">
+              <div class="game-card-content">
+                <h3>Krunker.io</h3>
+                <p class="description">"Krunker.io" is a fast-paced multiplayer first-person shooter game where players compete in various game modes, including free-for-all, team deathmatch, and capture the flag. With pixelated graphics and smooth gameplay, it's reminiscent of classic FPS games and highly addictive.</p>
+                <div class="game-card-data">
+                  <span class="data">Yendis Entertainment</span>
+                  <span class="stars">| ★★★★★</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="../index.html" class="game-card">
+              <img src="https://assetsio.gnwcdn.com/450-s3ywkg.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp" alt="Game 16">
+              <div class="game-card-content">
+                <h3>Realm of the Mad God</h3>
+                <p class="description">"Realm of the Mad God" is a cooperative MMO bullet hell shooter where players fight through dungeons, defeat bosses, and level up their characters. With permadeath mechanics and pixel art graphics, it offers a unique blend of action and RPG elements.</p>
+                <div class="game-card-data">
+                  <span class="data">Wild Shadow Studios</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://rankdle.io/data/image/screenshot-2023-09-26-095012.png" alt="Game 17">
+              <div class="game-card-content">
+                <h3>Slope</h3>
+                <p class="description">"Slope" is an endless runner game where players control a ball rolling down a steep slope, avoiding obstacles and collecting gems. With simple controls and addictive gameplay, it's easy to pick up and play, but hard to master.</p>
+                <div class="game-card-data">
+                  <span class="data">Rob Kay</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://www.innogames.com/fileadmin/user_upload/Forge-of-Empires-Screenshot-02.jpg" alt="Game 18">
+              <div class="game-card-content">
+                <h3>Forge of Empires</h3>
+                <p class="description">"Forge of Empires" is a strategy browser game where players build and manage their city from the Stone Age to the Modern Era. With PvP battles, guilds, and historical quests, it offers a rich and immersive experience for strategy enthusiasts.</p>
+                <div class="game-card-data">
+                  <span class="data">InnoGames</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://lh3.googleusercontent.com/gerLt5W7cS4Hv0wCRtNMWRM80b-fokacpvh1gizKD6yZRtOqW_gLcQPUg4kCbd1X8vIv3XDLhOS0hziOWgPU_cy5dw=w640-h400-e365-rj-sc0x00ffffff" alt="Game 19">
+              <div class="game-card-content">
+                <h3>Tank Trouble</h3>
+                <p class="description">"Tank Trouble" is a multiplayer tank battle game where players control tanks and engage in fast-paced combat. With destructible terrain and various power-ups, it offers chaotic and entertaining battles for players of all skill levels.</p>
+                <div class="game-card-data">
+                  <span class="data">Mads Purup</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://www.cbc.ca/kids/images/minigolf_thumb.jpeg" alt="Game 20">
+              <div class="game-card-content">
+                <h3>Minigolf World</h3>
+                <p class="description">"Minigolf World" is a multiplayer minigolf game where players compete on various courses, aiming for the lowest score. With realistic physics and challenging obstacles, it offers a fun and relaxing experience for golf enthusiasts.</p>
+                <div class="game-card-data">
+                  <span class="data">CrazyGames</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://i.ytimg.com/vi/QrCgheoiKl4/maxresdefault.jpg" alt="Game 21">
+              <div class="game-card-content">
+                <h3>Pac-Man.io</h3>
+                <p class="description">"Pac-Man.io" is a multiplayer adaptation of the classic arcade game where players control Pac-Man, competing to eat pellets and avoid ghosts. With fast-paced gameplay and competitive leaderboards, it's a modern twist on a nostalgic favorite.</p>
+                <div class="game-card-data">
+                  <span class="data">Namco</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1128810/capsule_616x353.jpg?t=1709259366" alt="Game 22">
+              <div class="game-card-content">
+                <h3>Risk</h3>
+                <p class="description">"Risk" is a classic board game brought to the digital world, where players compete for world domination by deploying armies and capturing territories. With strategic depth and multiplayer options, it offers endless hours of strategic gameplay.</p>
+                <div class="game-card-data">
+                  <span class="data">Hasbro</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://www.king.com/images/share/banners/candycrush.png?_v=kmoqjd" alt="Game 23">
+              <div class="game-card-content">
+                <h3>Candy Crush Saga</h3>
+                <p class="description">"Candy Crush Saga" is a popular match-three puzzle game where players swap colorful candies to make matches and clear levels. With hundreds of levels and addictive gameplay, it has become a staple of casual gaming on the web.</p>
+                <div class="game-card-data">
+                  <span class="data">King</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://play-lh.googleusercontent.com/bZregCeEpzMwRoocLnsYb4Te-vPPHkW1k5H1xsQ3qK9yE00fixpWu5fNsUz3ut2IiDHn" alt="Game 24">
+              <div class="game-card-content">
+                <h3>2048</h3>
+                <p class="description">"2048" is a simple yet addictive puzzle game where players slide numbered tiles on a grid to combine them and reach the elusive 2048 tile. With minimalist design and challenging gameplay, it's perfect for quick gaming sessions.</p>
+                <div class="game-card-data">
+                  <span class="data">Gabriele Cirulli</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+      
+            <a href="../index.html" class="game-card">
+              <img src="https://cdn.mos.cms.futurecdn.net/3e256e6529c69a3524bd87b9eba0cd9d.jpg" alt="Game 25">
+              <div class="game-card-content">
+                <h3>World's Biggest Pac-Man</h3>
+                <p class="description">"World's Biggest Pac-Man" is an online version of the classic arcade game featuring user-generated mazes. With endless possibilities and community-created content, it offers a fresh take on the beloved Pac-Man formula.</p>
+                <div class="game-card-data">
+                  <span class="data">Namco</span>
+                  <span class="stars">| ★★★★☆</span>
+                </div>
+              </div>
+            </a>
+
+
+        </div>
+    </div>
+
+
+  <script src="games.js"></script>
+</body>
+</html>
