@@ -469,6 +469,60 @@ window.onload = function() {
       return;
     }
 
+// Get the Firebase database reference
+var chatsRef = db.ref('chats/');
+
+// Keep track of the total number of messages
+var totalNumMessages = 0;
+
+// Keep track of the number of messages when the user was last on the page
+var numMessagesOnPageFocus = 0;
+
+// Flag to indicate if the user is currently on the page
+var onPage = true;
+
+// Function to update the badge notification
+function updateBadgeNotification(numUnreadMessages) {
+  if (onPage || numUnreadMessages === 0) {
+    document.title = `ZNet`;
+  } else {
+    var messageWord = numUnreadMessages === 1 ? 'Message' : 'Messages';
+    document.title = `(${numUnreadMessages}) Unread ${messageWord} | ZNet`;
+  }
+}
+
+// Listen for changes in the "chats" node
+chatsRef.on('value', function(snapshot) {
+  // Get the current number of messages
+  var numMessages = snapshot.numChildren();
+
+  // Calculate the number of unread messages
+  var numUnreadMessages = onPage ? 0 : Math.max(0, numMessages - numMessagesOnPageFocus);
+
+  // Update the badge notification
+  updateBadgeNotification(numUnreadMessages);
+
+  // Update the total number of messages
+  totalNumMessages = numMessages;
+});
+
+// Event listener for when the page gains focus
+window.addEventListener('focus', function() {
+  onPage = true;
+  updateBadgeNotification(0);
+  numMessagesOnPageFocus = totalNumMessages;
+});
+
+// Event listener for when the page loses focus
+window.addEventListener('blur', function() {
+  onPage = false;
+});
+
+// Initialize numMessagesOnPageFocus to 0 when the page initially loads
+numMessagesOnPageFocus = 0;
+
+
+
         var banButton = document.createElement('button');
         banButton.setAttribute('id', 'ban_button');
         banButton.innerHTML = '<i class="fa-solid fa-user-slash"></i>';
