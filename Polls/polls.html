@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="icon" type="image/png" href="atom-icon.png">
+    <meta charset="utf-8">
+    <title>2-1 | Polls</title>
+    <!-- Google fonts. -->
+    <link href='https://fonts.googleapis.com/css?family=Bungee Outline' rel='stylesheet'/>
+    <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'/>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">    <script src="https://kit.fontawesome.com/a47fae704c.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+    <!-- Use firebase app and database. -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    
+    <!-- The CSS and JS file must be declared after the things above-->
+    <link rel="stylesheet" href="polls.css"/>
+    <script type="text/javascript" src="polls.js"></script>
+  </head>
+  <body>
+    <div class="create-button" onclick="app.openPopup()">
+      <i class="fas fa-plus"></i>
+    </div>
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <span class="close" onclick="app.closePopup()">&times;</span>
+        <h2>Create a Poll</h2>
+        <input class="question-input" autocomplete="off" type="text" id="question" placeholder="Ask a question...">
+        <div id="options">
+          <input type="text" placeholder="Option">
+          <input type="text" placeholder="Option">
+        </div>
+        <button class="add-option" id="add-option" onclick="addOption()" style="display: none;">Add Option</button>
+        <button id="create-poll" onclick="app.createPoll()">Create Poll</button>
+      </div>
+    </div>
+    <div id="polls-container"></div>
+  </body>
+</html>
