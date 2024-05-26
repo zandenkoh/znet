@@ -86,6 +86,57 @@ window.onload = function() {
         this.lastMessageTime = {};
         this.bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || {};
       }
+
+      delete_all_messages() {
+        var parent = this;
+        // Get the firebase database reference to the "chats" node
+        var chatsRef = db.ref('chats/');
+  
+        // Remove all messages from the database
+        chatsRef.remove()
+          .then(() => {
+            // After removing the entire "chats" node, add a custom message
+            parent.add_custom_message();
+          })
+          .catch((error) => {
+            console.error("Error removing messages: ", error);
+          });
+      }
+      add_custom_message() {
+        var parent = this;
+      
+        // Create a new timestamp for the message
+        var timestamp = Date.now();
+      
+        // Get the Firebase database reference
+        var chatsRef = db.ref('chats/');
+      
+        // Get the number of existing messages to determine the index
+        chatsRef.once('value', function(message_object) {
+          var index = parseFloat(message_object.numChildren()) + 1;
+      
+          // Set the custom message data in the database
+          var customMessageData = {
+            name: "ZNet",
+            message: "To keep the chat experience smooth and responsive for everyone, we periodically delete old messages once the chat reaches a certain limit. This helps us manage the chat efficiently and ensures that the ZNet runs optimally. All previous messages have been deleted. Feel free to continue the conversation!",
+            timestamp: timestamp,
+            index: index,
+            sender: "ZNet_System",
+          };
+      
+          // Push the custom message data to the database
+          chatsRef.child(`message_${index}`).set(customMessageData)
+            .then(function() {
+              // After we send the chat, refresh to get the new messages
+              parent.refresh_chat();
+            })
+            .catch(function(error) {
+              console.error("Error adding custom message: ", error);
+            });
+        });
+      }
+      
+      
     
     
       banUser(userId) {
@@ -194,7 +245,7 @@ window.onload = function() {
         }
       }
 
-      delete_all_messages() {
+      /*delete_all_messages() {
         // Get the firebase database reference to the "chats" node
         var chatsRef = db.ref('chats/');
     
@@ -210,7 +261,7 @@ window.onload = function() {
           .catch((error) => {
             console.error("Error removing messages: ", error);
           });
-      }
+      }*/
       // Home() is used to create the home page
       home(){
         // First clear the body before adding in
@@ -521,6 +572,27 @@ window.addEventListener('blur', function() {
 // Initialize numMessagesOnPageFocus to 0 when the page initially loads
 numMessagesOnPageFocus = 0;
 
+      // Get the Firebase database reference
+      var chatsRef = db.ref('chats/');
+
+      // Keep track of the total number of messages
+      var totalNumMessages = 0;
+
+      // Listen for changes in the "chats" node
+      chatsRef.on('value', function(snapshot) {
+        // Get the current number of messages
+        var numMessages = snapshot.numChildren();
+
+        // Update the total number of messages
+        totalNumMessages = numMessages;
+
+        // Check if the total number of messages has reached 50
+        if (totalNumMessages >= 50) {
+          // Delete all messages if the count reaches 50
+          parent.delete_all_messages();
+        }
+      });
+
 
 
         var banButton = document.createElement('button');
@@ -555,6 +627,12 @@ numMessagesOnPageFocus = 0;
   function createProfileCircle(name) {
     var profileCircle = document.createElement('div');
     profileCircle.setAttribute('class', 'profile-circle');
+
+    // Generate a unique background colour for the profile circle based on the user's name
+    var hue = (name.charCodeAt(0) * 137.508) % 100; // Use the character code of the first letter for better distribution
+    hue = hue + 200; // Shift hue towards the blue-purple range
+    profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`; // Keep saturation and lightness constant
+
     profileCircle.textContent = name.charAt(0).toUpperCase();
     return profileCircle;
   } 
@@ -863,6 +941,11 @@ db.ref('users').on('value', (snapshot) => {
         profileCircle.style.justifyContent = 'center';
         profileCircle.style.display = 'flex';
         profileLetter.textContent = `${parent.get_name()}`.charAt(0).toUpperCase();
+        // Generate a unique background colour for the profile circle based on the user's name
+        var hue = (parent.get_name().charCodeAt(0) * 137.508) % 100; // Use the character code of the first letter for better distribution
+        hue = hue + 200; // Shift hue towards the blue-purple range
+        profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`; // Keep saturation and lightness constant
+
 
         profileName.style.color = '#000';
         profileName.style.fontSize = '15px';
@@ -1520,6 +1603,22 @@ db.ref('users').on('value', (snapshot) => {
               };
             }
           }
+          // Function to create a profile circle
+function createProfile(name) {
+  var profile_circle = document.createElement('div');
+  profile_circle.classList.add('profile_circle');
+  
+    // Generate a unique background colour for the profile circle based on the user's name
+    var hue = (name.charCodeAt(0) * 137.508) % 100; // Use the character code of the first letter for better distribution
+    hue = hue + 200; // Shift hue towards the blue-purple range
+    profile_circle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`; // Keep saturation and lightness constant
+
+  // Get the first letter of the name and convert it to uppercase
+  var firstLetter = name.charAt(0).toUpperCase();
+  profile_circle.textContent = firstLetter;
+
+  return profile_circle;
+}
           
           // Now we're done. Simply display the ordered messages
           ordered.forEach(function(data) {
@@ -1535,6 +1634,9 @@ db.ref('users').on('value', (snapshot) => {
     
               var message_user_container = document.createElement('div')
               message_user_container.setAttribute('class', 'message_user_container')
+
+              // Create the profile circle for the user
+              var profile_circle = createProfile(name);
     
               var message_user = document.createElement('p')
               message_user.setAttribute('class', 'message_user')
@@ -1564,7 +1666,7 @@ db.ref('users').on('value', (snapshot) => {
               var formattedTimestamp = formatTimestamp(timestamp);
               message_timestamp.textContent = formattedTimestamp;
   
-               message_user_container.append(message_user);
+               message_user_container.append(profile_circle, message_user);
                message_content_container.append(message_content, message_timestamp); // Append the timestamp
                message_inner_container.append(message_user_container, message_content_container);
                message_container.append(message_inner_container);
