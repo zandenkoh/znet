@@ -471,7 +471,7 @@ body {
   float: left;
   overflow-y: auto;
   font-family: 'Varela Round', sans-serif;
-  padding-left: 15px;
+  padding-left: 50px;
   padding-right: 15px;
   padding-top: 15px;
   padding-bottom: 90px;
@@ -1402,10 +1402,10 @@ body {
   transition: height 0.3s ease; /* Add this line for smooth height transition */
   position: relative;
   margin-bottom: 30px;
-  width: 95%;
+  width: 93%;
   min-width: 0;
   white-space: pre-wrap;
-  margin-left: 20px;
+  margin-left: 10px;
   transition: ease-in-out 0.3s;
   color: var(--message-container-color, #6e6e6e);
   padding: 14px 0;
@@ -1500,6 +1500,23 @@ body {
   color: var(--message-user-color, #393939);
   font-weight: 900;
   /*user-select: none;*/
+}
+
+.profile_circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #939393;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  margin-left: -50px;
+  margin-top: -10px;
+  user-select: none;
 }
 
 /* Styling for the timestamp in chat messages */
