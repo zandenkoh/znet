@@ -629,9 +629,9 @@ numMessagesOnPageFocus = 0;
     profileCircle.setAttribute('class', 'profile-circle');
 
     // Generate a unique background colour for the profile circle based on the user's name
-    var hue = (name.charCodeAt(0) * 137.508) % 100; // Use the character code of the first letter for better distribution
-    hue = hue + 200; // Shift hue towards the blue-purple range
-    profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`; // Keep saturation and lightness constant
+    var hue = (name.charCodeAt(0) * 137.508) % 200; // Use the character code of the first letter for better distribution
+    hue = (hue + 200) % 360; // Shift hue towards the blue-purple range
+    profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`; // Keep saturation and lightness constant
 
     profileCircle.textContent = name.charAt(0).toUpperCase();
     return profileCircle;
@@ -751,7 +751,7 @@ db.ref('users').on('value', (snapshot) => {
       listItem.style.marginBottom = '10px';
       listItem.style.fontSize = '14px';
 
-      const profileCircle = createProfileCircle(userKey);
+      const profileCircle = createProfileCircle(userData.name); // Pass the full name
       listItem.appendChild(profileCircle);
 
       const userName = document.createElement('span');
@@ -822,6 +822,7 @@ db.ref('users').on('value', (snapshot) => {
           if (chat_content_container.style.width === '100%') {
             //expand the sidebar
             chat_content_container.style.width = '84%';
+            chat_content_container.style.paddingLeft = '50px';
             chat_content_container.style.top = '0';
             chat_content_container.style.right = '0';
             chat_content_container.style.marginLeft = '16%';
@@ -837,6 +838,7 @@ db.ref('users').on('value', (snapshot) => {
           } else {
             //collapse the sidebar
             chat_content_container.style.width = '100%';
+            chat_content_container.style.paddingLeft = '60px';
             chat_content_container.style.marginLeft = '0';
             chat_content_container.style.zIndex = '9999';
             chat_content_container.style.transition = '0.4s ease';
@@ -942,10 +944,10 @@ db.ref('users').on('value', (snapshot) => {
         profileCircle.style.display = 'flex';
         profileLetter.textContent = `${parent.get_name()}`.charAt(0).toUpperCase();
         // Generate a unique background colour for the profile circle based on the user's name
-        var hue = (parent.get_name().charCodeAt(0) * 137.508) % 100; // Use the character code of the first letter for better distribution
-        hue = hue + 200; // Shift hue towards the blue-purple range
-        profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`; // Keep saturation and lightness constant
-
+        var hue = (parent.get_name().charCodeAt(0) * 137.508) % 200; // Use the character code of the first letter for better distribution
+        hue = (hue + 200) % 360; // Shift hue towards the blue-purple range
+        profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`; // Keep saturation and lightness constant
+       
 
         profileName.style.color = '#000';
         profileName.style.fontSize = '15px';
@@ -1609,9 +1611,9 @@ function createProfile(name) {
   profile_circle.classList.add('profile_circle');
   
     // Generate a unique background colour for the profile circle based on the user's name
-    var hue = (name.charCodeAt(0) * 137.508) % 100; // Use the character code of the first letter for better distribution
-    hue = hue + 200; // Shift hue towards the blue-purple range
-    profile_circle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`; // Keep saturation and lightness constant
+    var hue = (name.charCodeAt(0) * 137.508) % 200; // Use the character code of the first letter for better distribution
+    hue = (hue + 200) % 360; // Shift hue towards the blue-purple range
+    profile_circle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`; // Keep saturation and lightness constant
 
   // Get the first letter of the name and convert it to uppercase
   var firstLetter = name.charAt(0).toUpperCase();
@@ -1666,8 +1668,8 @@ function createProfile(name) {
               var formattedTimestamp = formatTimestamp(timestamp);
               message_timestamp.textContent = formattedTimestamp;
   
-               message_user_container.append(profile_circle, message_user);
-               message_content_container.append(message_content, message_timestamp); // Append the timestamp
+               message_user_container.append(profile_circle, message_user, message_timestamp);
+               message_content_container.append(message_content); // Append the timestamp
                message_inner_container.append(message_user_container, message_content_container);
                message_container.append(message_inner_container);
   
