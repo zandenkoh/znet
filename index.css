@@ -138,7 +138,7 @@
 body {
   font-family: 'Bungee Outline', sans-serif;
   font-weight: 900;
-  overflow-y:  hidden;
+  overflow-y: hidden;
   overflow-x: hidden;
   /*animation: blur 2s ease-in-out;*/
   height: 100%;
@@ -199,14 +199,16 @@ body {
 
 #title {
   /*font-family: "Abel", sans-serif;*/
-  font-family: "Darker Grotesque", sans-serif;
+  /*font-family: "Darker Grotesque", sans-serif;*/
+  font-family: "Dosis", sans-serif;
+  font-optical-sizing: auto;
   display: inline-block;
   color: #000000;
   font-size: 60px;
-  letter-spacing: 3px;
+  letter-spacing: 0;
   user-select: none;
   font-optical-sizing: auto;
-  font-weight: 300;
+  font-weight: 100;
 }
 
 #fileInput {
@@ -777,6 +779,24 @@ body {
   background: #e4e4e4;
 }
 
+.meme {
+  color: var(--buttons, #646464);
+  font-size: 16px;
+  padding: 12px 14px;
+  padding-left: 16px;
+  animation: var(--meet-animation, none 1s infinite);
+  border-radius: 8px;
+  white-space: nowrap;
+  position: relative;
+}
+
+.meme:hover {
+  color: var(--buttons-hover, #646464);
+  cursor: pointer;
+  transform: scale(1);
+  background: #eaeaea;
+}
+
 .note {
   color: var(--buttons, #646464);
   font-size: 16px;
@@ -835,25 +855,31 @@ body {
 
 .polls h1 {
   font-family: "Darker Grotesque", sans-serif;
-  font-size: 45px;
+  font-size: 38px;
   font-weight: 300;
-  margin-top: -20px;
+  margin-top: -14px;
 }
 
-.polls i {
+.remove-polls-button {
   position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 28px;
-}
-
-.polls i:hover {
+  top: 6px;
+  right: 6px;
   cursor: pointer;
+  font-size: 100px;
+  height: 47px;
+  width: 47px;
+  padding: 10px;
+  background: transparent;
+  border-radius: 50%;
+  scale: 1;
 }
 
-.poll i {
-  font-size: 19px;
+.remove-polls-button:hover {
+  background: #f0f0f0;
+}
 
+.poll img {
+  font-size: 19px;
 }
 
 .polls iframe {
@@ -864,7 +890,7 @@ body {
 }
 
 .games {
-  font-family: Verdana;
+  /*font-family: Verdana;
   display: none;
   flex-direction: column;
   align-items: center;
@@ -874,23 +900,69 @@ body {
   top: 0;
   right: 0;
   z-index: 7001;
-  background: #ffffff;
+  background: #ffffff;*/
 }
 
-.games-top {
+.games {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100%;
+  background: #ffffff;
+  z-index: 7001;
+  padding: 0;
+  cursor: default;
+}
+
+.games-header {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
+  height: 60px;
+  padding-top: 0;
+  border-bottom: 1px solid #0000003b;
+  z-index: 7003;
+}
+
+.games h1 {
+  font-family: "Darker Grotesque", sans-serif;
+  font-size: 38px;
+  font-weight: 300;
+  margin-top: -14px;
+}
+
+.remove-games-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  cursor: pointer;
+  font-size: 100px;
+  height: 47px;
+  width: 47px;
   padding: 10px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  border-radius: 50%;
+  scale: 1;
+}
+
+.remove-games-button:hover {
+  background: #f0f0f0;
+}
+
+.games-main {
+  width: 100%;
+  padding: none;
+  margin: none;
 }
 
 .games iframe {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 60px);
   top: 0;
-  right: 0;
+  left: 0;
+  z-index: 7002;
+  margin: 0;
 }
 
 .users {
@@ -1026,8 +1098,8 @@ body {
 }
 
 .overlay:hover {
-  cursor: pointer;
-  background: #00000072;
+  /*cursor: pointer;
+  background: #00000072;*/
 }
 
 .music:hover {
@@ -1402,7 +1474,7 @@ body {
   transition: height 0.3s ease; /* Add this line for smooth height transition */
   position: relative;
   margin-bottom: 30px;
-  width: 93%;
+  width: 95%;
   min-width: 0;
   white-space: pre-wrap;
   margin-left: 10px;
@@ -1414,7 +1486,7 @@ body {
   line-height: 20px;
   font-size: 11px;
   user-select: text;
-  border-bottom: 2px solid var(--message-container-border, #00000011);
+  border-bottom: 2px solid var(--message-container-border, #0000000f);
   line-height: 1.6;
 } 
 
@@ -1432,12 +1504,6 @@ body {
   cursor: normal;
   margin-bottom: 40px;
 }*/
-
-.message_container:hover .message_timestamp {
-  transition: 0.3s ease; /* Add this line for smooth height transition */
-  display: block; /* The element will appear when hovering over .message_container */
-  opacity: 1;
-}
 
 
 @keyframes Newmessage {
@@ -1501,14 +1567,13 @@ body {
   position: relative;
   margin-top: -10px;
   margin-left: 0;
-
   font-weight: 100;
   font-size: 15px;
   margin-bottom: 0px;
   /*color: #095495;*/
   color: var(--message-user-color, #393939);
   font-weight: 900;
-  /*user-select: none;*/
+  user-select: none;
   padding-top: 20px;
 }
 
@@ -1534,8 +1599,6 @@ body {
   font-size: 1px;
   color: #8a8a8a;
   user-select: none;
-  opacity: 1;
-  display: block;
   margin-top: -25px;
   right: -50px;
   transition:  0.3s ease-in-out; /* Add a smooth transition */
@@ -1804,7 +1867,8 @@ body {
 /* Media query for smaller screens (phones) */
 @media (max-width: 900px) {
   body {
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
   #join_inner_container {
     width: 100%;
@@ -1904,4 +1968,258 @@ body {
     width: 100%;
     height: 50%;
   }
+}
+
+
+.advertising-about {
+  font-family: 'Varela Round';
+  position: absolute;
+  height: calc(100vh - 100px);
+  width: calc(100vw - 100px);
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow-x: hidden;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6000;
+  display: none;
+  user-select: text;
+}
+
+.advertising-about::-webkit-scrollbar{
+  display: none;
+}
+
+.advertising-about .ads-content {
+  margin: 0 auto;
+  position: relative;
+  padding: 0 150px 30px 150px;
+}
+
+.ads-content-controls {
+  text-align: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  margin-top: 20px;
+  z-index: 1;
+}
+
+.advertising-about span {
+  font-size: 28px;
+  cursor: pointer;
+  margin-top: 15px;
+  position: absolute;
+  margin-top: 20px;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+.advertising-about span:hover {
+  color: #848484;
+}
+
+.advertising-about h2 {
+  font-size: 20px;
+  color: #767676;
+  user-select: none;
+}
+
+.about-image {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  aspect-ratio: 4/1;
+  object-fit: cover;
+  scale: 0.5;
+}
+
+.advertising-about h3 {
+  font-size: 22px;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+.advertising-about p {
+  font-size: 16px;
+  font-weight: 100;
+  color: #666;
+  line-height: 2;
+  margin-bottom: 15px;
+}
+
+.special-text {
+  margin-left: 10px;
+}
+
+.versions-hr {
+  border: 1px solid #c2c2c2;
+}
+
+.advertising-about p:last-child {
+  margin-bottom: 0;
+}
+
+
+.advertising-rules {
+  font-family: 'Varela Round';
+  position: absolute;
+  height: 400px;
+  width: 725px;
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6000;
+  display: none;
+}
+
+.advertising-rules::-webkit-scrollbar {
+  display: none;
+}
+.advertising-rules h2 {
+  margin-bottom: 10px;
+}
+
+.advertising-rules p {
+  font-weight: 100;
+  user-select: text;
+}
+
+.ads-content {
+  position: relative;
+  justify-content: center;
+}
+
+.ads-content img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.ads-text {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.ads-text h2 {
+  font-size: 16px;
+  margin: 0;
+  color: #333;
+  text-align: center;
+}
+
+.ads-text p {
+  font-size: 14px;
+  color: #666;
+  margin: 8px 0;
+}
+
+.ads-text ul {
+  font-size: 14px;
+  color: #666;
+  margin: 8px 0;
+  text-align: left;
+  margin-left: 14%;
+  margin-right: 15%;
+  font-weight: 100;
+}
+
+.close-ads-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 30px;
+  height: 24px;
+  width: 24px;
+  padding: 10px;
+  background: transparent;
+  border-radius: 50%;
+  z-index: 2;
+  display: none;
+}
+
+.close-ads-btn:hover {
+  background: #f0f0f0;
+}
+
+.dump-coming-soon {
+  width: 700px;
+  height: 400px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 20px;
+  display: none;
+  z-index: 9999;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dump-coming-soon-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/*
+.profile-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.profile-popup .profile-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.profile-popup .username {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.profile-popup .followers,
+.profile-popup .following {
+  margin-bottom: 5px;
+}
+
+.follow-button {
+  margin-left: auto;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.follow-button:hover {
+  background: #0056b3;
 }
