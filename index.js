@@ -57,8 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-document.addEventListener('contextmenu',
-event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault());
 // We enclose this in window.onload.
 // So we don't have ridiculous errors.
 window.onload = function() {
@@ -593,7 +592,7 @@ window.onload = function() {
         dropdown.appendChild(placeholder_option);
         
         // Create option elements
-        var options = ['2-1', '2-2', '2-3', '2-4','2-5', '2-6', '2-7', '2-8', '2-9'];
+        var options = ['1-1', '1-2', '1-3', '1-4','1-5', '1-6', '1-7', '1-8', '1-9', '2-1', '2-2', '2-3', '2-4','2-5', '2-6', '2-7', '2-8', '2-9', '3-1', '3-2', '3-3', '3-4','3-5', '3-6', '3-7', '3-8', '3-9', '3-10'];
         options.forEach(function(optionText) {
           var option = document.createElement('option');
           option.value = optionText;
@@ -892,6 +891,16 @@ numMessagesOnPageFocus = 0;
   participantsTitle.style.background = '#ffffff';
   participantsTitle.style.display = 'block';
 
+  var searchInput = document.createElement('input');
+  searchInput.setAttribute('type', 'text');
+  searchInput.setAttribute('id', 'participants_search');
+  searchInput.setAttribute('placeholder', 'Search members...');
+  searchInput.style.width = 'calc(100% - 20px)';
+  searchInput.style.padding = '10px';
+  searchInput.style.margin = '10px 10px 0 10px';
+  searchInput.style.border = '1px solid #ccc';
+  searchInput.style.borderRadius = '5px';
+
   var participantsLine = document.createElement('hr');
 
   var participantsList = document.createElement('ul');
@@ -899,7 +908,7 @@ numMessagesOnPageFocus = 0;
   participantsList.style.padding = '20px 0 10px 0';
 
 
-  participantsPopup.append(participantsTitle, participantsLine, participantsList);
+  participantsPopup.append(participantsTitle, searchInput, participantsLine, participantsList);
 
   // Add event listener to the participants button
   participantsButton.addEventListener('click', () => {
@@ -916,21 +925,24 @@ numMessagesOnPageFocus = 0;
     }
   });
 
-  var rulesPop = document.getElementById('rulesPopup');
-  var aboutPop = document.getElementById('aboutPopup');
+  searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const listItems = participantsList.getElementsByTagName('li');
 
-  var pOverlay = document.getElementById('overlay');
-  pOverlay.addEventListener('click', () => {
-    participantsPopup.style.display = 'none';
-    participantsPopup.style.zIndex = '1';
-    pOverlay.style.display = 'none';
-    pOverlay.style.zIndex = '1';
-    rulesPop.style.display = 'none';
-    aboutPop.style.display = 'none';
-    dumpPopup.style.display = 'none';
-    isDump = false;
-    sidebar_icon.style.display = 'block';
+    for (let i = 0; i < listItems.length; i++) {
+        const item = listItems[i];
+        const userName = item.querySelector('.user-name').textContent.toLowerCase();
+        const userClass = item.querySelector('.user-class').textContent.toLowerCase();
+
+        if (userName.includes(searchTerm) || userClass.includes(searchTerm)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    }
   });
+
+
 
   // Set up a real-time listener on the "users" node
 // Set up a real-time listener on the "users" node
@@ -1001,6 +1013,22 @@ db.ref('users').on('value', (snapshot) => {
     }
   `;
   document.head.appendChild(style);
+
+  var rulesPop = document.getElementById('rulesPopup');
+  var aboutPop = document.getElementById('aboutPopup');
+
+  var pOverlay = document.getElementById('overlay');
+  pOverlay.addEventListener('click', () => {
+    participantsPopup.style.display = 'none';
+    participantsPopup.style.zIndex = '1';
+    pOverlay.style.display = 'none';
+    pOverlay.style.zIndex = '1';
+    rulesPop.style.display = 'none';
+    aboutPop.style.display = 'none';
+    dumpPopup.style.display = 'none';
+    isDump = false;
+    sidebar_icon.style.display = 'block';
+  });
 
         // GET THAT MEMECHAT HEADER OUTTA HERE
         var title_container = document.getElementById('title_container')
