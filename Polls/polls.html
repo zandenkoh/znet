@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <link rel="icon" type="image/png" href="atom-icon.png">
+    <link rel="icon" type="image/png" href="../atom-icon.png">
     <meta charset="utf-8">
-    <title>2-1 | Polls</title>
+    <title>ZNet</title>
     <!-- Google fonts. -->
     <link href='https://fonts.googleapis.com/css?family=Bungee Outline' rel='stylesheet'/>
     <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'/>
@@ -19,20 +19,27 @@
     <script type="text/javascript" src="polls.js"></script>
   </head>
   <body>
+
+      <!-- Loading Screen
+      <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+      </div>-->
     <div class="create-button" onclick="app.openPopup()">
       <i class="fas fa-plus"></i>
+      <span>Create</span>
     </div>
     <div id="popup" class="popup">
       <div class="popup-content">
-        <span class="close" onclick="app.closePopup()">&times;</span>
+        <img class="close" onclick="app.closePopup()" src="../SVGs/cross.svg">
         <h2>Create a Poll</h2>
         <input class="question-input" autocomplete="off" type="text" id="question" placeholder="Ask a question...">
         <div id="options">
           <input type="text" placeholder="Option">
           <input type="text" placeholder="Option">
         </div>
-        <button class="add-option" id="add-option" onclick="addOption()" style="display: none;">Add Option</button>
-        <button id="create-poll" onclick="app.createPoll()">Create Poll</button>
+        <button class="add-option" id="add-option" onclick="addOption()" style="display: block;">Add Option</button>
+        <button class="create-poll-button" id="create-poll" onclick="app.createPoll()">Create Poll</button>
       </div>
     </div>
     <div id="polls-container"></div>
