@@ -793,7 +793,7 @@ numMessagesOnPageFocus = 0;
         totalNumMessages = numMessages;
 
         // Check if the total number of messages has reached 50
-        if (totalNumMessages >= 50) {
+        if (totalNumMessages >= 150) {
           // Delete all messages if the count reaches 50
           parent.delete_all_messages();
         }
