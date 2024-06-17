@@ -5,7 +5,6 @@ body {
   }
   
   .create-button {
-    /*For admin purposes*/
     display: block;
 
     position: fixed;
@@ -15,11 +14,28 @@ body {
     color: white;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 100px;
     text-align: center;
     line-height: 50px;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
+  }
+
+  .create-button:hover {
+    width: 140px;
+  }
+
+  .create-button span {
+    opacity: 0;
+    display: none;
+    margin-left: 10px;
+    transition: 0.3s ease;
+  }
+
+  .create-button:hover span {
+    opacity: 1;
+    display: inline-block;
   }
   
   .popup {
@@ -40,7 +56,8 @@ body {
     margin-left: 50%;
     transform: translate(-50%, -50%);
     background: #fff;
-    padding: 30px 30px;
+    padding: 10px 30px;
+    padding-bottom: 25px;
     margin-top: 20%;
     border-radius: 15px;
   }
@@ -48,14 +65,24 @@ body {
   .close {
     position: absolute;
     top: 10px;
-    right: 20px;
+    right: 10px;
     cursor: pointer;
     font-size: 30px;
+    height: 24px;
+    width: 24px;
+    padding: 10px;
+    background: transparent;
+    border-radius: 50%;
+  }
+
+  .close:hover {
+    background: #f0f0f0;
   }
   
   h2 {
     margin-bottom: 20px;
     font-size: 24px;
+    user-select: none;
   }
 
   .question-input {
@@ -102,9 +129,26 @@ body {
   .add-option {
     position: relative;
     display: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    height: 30px;
+    width: 95px;
+    background: #fff;
+    color: #5b5b5b;
+    border: 1px solid #858585;
+    border-radius: 20px;
+    margin-top: 5px;
+    transition: 0.2s ease;
+    user-select: none;
   }
 
-  button {
+  .add-option:hover {
+    border: 1px solid #000;
+    color: #000;
+    cursor: pointer;
+  }
+
+  .create-poll-button {
     background-color: #000000;
     color: white;
     border: none;
@@ -113,9 +157,10 @@ body {
     cursor: pointer;
     margin-top: 30px;
     font-size: 16px;
+    user-select: none;
   }
   
-  button:hover {
+  .create-poll-button:hover {
     background-color: #000000bb;
   }
   
@@ -136,6 +181,26 @@ body {
     border: 1px solid #0000001f;
     user-select: none;
   }
+
+.poll.fly-up {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: 0.6s ease;
+}
+
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .nav-button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
 
   .poll:hover {
   }
@@ -220,12 +285,12 @@ body {
 
   .option:hover {
     cursor: pointer;
-    border: 1px solid #000000;
-    border-left: 8px solid #000000;
+    border: 1px solid #00000069;
+    border-left: 1px solid #00000069;
   }
 
   .option:hover .vote-bar{
-    background-color: #000000;
+    background-color: #0000007d;
   }
   
   .option-votes {
@@ -241,8 +306,6 @@ body {
     margin-top: 5px;
   }
   
-
-  
   .option button {
     background-color: #25D366;
     color: white;
@@ -257,7 +320,7 @@ body {
     background-color: #1da851;
   }
 
-  /*.option .disabled{
+  <!--.option .disabled{
     cursor: pointer;
     outline: 1px solid #000000;
     border: 1px solid #000000;
@@ -274,7 +337,7 @@ body {
 
   .bar-disabled {
     background: #000000;
-  }*/
+  }-->
 
   .disabled .vote-bar{
     background: #000;
@@ -286,4 +349,31 @@ body {
   }
   .poll.disabled-poll {
     pointer-events: none;
+  }
+
+
+  .skip-button {
+    background: none;
+    border: 1px solid #858585;
+    color: #333;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    opacity: 0;
+    transition: 0.2s ease;
+  }
+
+  .poll:hover .skip-button {
+    opacity: 1;
+  }
+  
+  .skip-button:hover {
+    border: 1px solid #000;
+    color: #000;
+    background: none;
   }
