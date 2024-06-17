@@ -2222,4 +2222,9 @@ body {
 
 .follow-button:hover {
   background: #0056b3;
+}*/
+
+#participants_search:focus {
+  position: sticky;
+  top: 75px;
 }
