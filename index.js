@@ -63,6 +63,14 @@ event => event.preventDefault());
 // So we don't have ridiculous errors.
 window.onload = function() {
 
+  const botMessages = [
+    "Greetings! How can I assist you today?",
+    "Hello! What can I do for you?",
+    "Hi there! Need any help?",
+    "Hey! How's it going?",
+    "Hello! How can I be of service?"
+  ];
+
   // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAaYarZ9GRra00k3-bZ3i3Yq7Z29JKBGlQ",
@@ -85,7 +93,122 @@ window.onload = function() {
       constructor() {
         this.lastMessageTime = {};
         this.bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || {};
+
+        this.users = {}; // To store user data locally
+        this.currentUser = localStorage.getItem('name');
       }
+
+      async loadUsers() {
+        const usersSnapshot = await db.ref('users').once('value');
+        this.users = usersSnapshot.val() || {};
+        this.renderUsers();
+      }
+      
+      getRandomMessage() {
+        const randomIndex = Math.floor(Math.random() * botMessages.length);
+        return botMessages[randomIndex];
+      }
+
+      renderUsers() {
+        const participantsContainer = document.getElementById('participants');
+        participantsContainer.innerHTML = ''; // Clear existing users
+        for (const [username, userData] of Object.entries(this.users)) {
+            const userElement = document.createElement('div');
+            userElement.classList.add('user');
+            userElement.dataset.username = username;
+            userElement.innerHTML = `
+                <span class="profile-circle">${username.charAt(0).toUpperCase()}</span>
+                <span class="username">${username}</span>
+                <button class="follow-button">${this.isFollowing(username) ? 'Unfollow' : 'Follow'}</button>
+            `;
+            userElement.querySelector('.username').addEventListener('click', () => this.showProfile(username));
+            userElement.querySelector('.follow-button').addEventListener('click', (e) => this.toggleFollow(e, username));
+            participantsContainer.appendChild(userElement);
+        }
+      }
+
+      isFollowing(username) {
+        const user = this.users[this.currentUser];
+        return user && user.following && user.following.includes(username);
+      }
+
+      async toggleFollow(event, username) {
+        const button = event.target;
+        const currentUserData = this.users[this.currentUser];
+        const isCurrentlyFollowing = this.isFollowing(username);
+
+        if (isCurrentlyFollowing) {
+            // Unfollow
+            await db.ref(`users/${this.currentUser}/following`).set(currentUserData.following.filter(user => user !== username));
+            await db.ref(`users/${username}/followers`).set(this.users[username].followers.filter(user => user !== this.currentUser));
+        } else {
+            // Follow
+            await db.ref(`users/${this.currentUser}/following`).set([...(currentUserData.following || []), username]);
+            await db.ref(`users/${username}/followers`).set([...(this.users[username].followers || []), this.currentUser]);
+        }
+        // Reload users to update UI
+        this.loadUsers();
+      }
+
+      async showProfile(username) {
+        const user = this.users[username];
+        if (!user) return;
+
+        const profilePopup = document.createElement('div');
+        profilePopup.classList.add('profile-popup');
+        profilePopup.innerHTML = `
+            <div class="profile-circle">${username.charAt(0).toUpperCase()}</div>
+            <div class="username">${username}</div>
+            <div class="followers">Followers: ${user.followers ? user.followers.length : 0}</div>
+            <div class="following">Following: ${user.following ? user.following.length : 0}</div>
+        `;
+
+        // Close button
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.addEventListener('click', () => profilePopup.remove());
+        profilePopup.appendChild(closeButton);
+
+        document.body.appendChild(profilePopup);
+      }
+      
+      /*handleNewMessage(username, message) {
+        const currentTime = Date.now();
+        if (this.lastMessageTime[username] && currentTime - this.lastMessageTime[username] < 10000) {
+          console.log(`${username} is sending messages too quickly, please wait 10 seconds before sending another message.`);
+          return;
+        }
+        this.lastMessageTime[username] = currentTime;
+    
+        if (this.hasProfanity(message) || this.isSpamming(username, message, 10000)) {
+          this.logoutUser(username);
+          return;
+        }
+    
+        this.send_message(message);
+      }*/
+    
+        handleNewMessage(username, message) {
+          const currentTime = Date.now();
+          if (this.lastMessageTime[username] && currentTime - this.lastMessageTime[username] < 10000) {
+            console.log(`${username} is sending messages too quickly, please wait 10 seconds before sending another message.`);
+            return;
+          }
+          this.lastMessageTime[username] = currentTime;
+    
+          if (this.hasProfanity(message) || this.isSpamming(username, message, 10000)) {
+            this.logoutUser(username);
+            return;
+          }
+    
+          if (message.includes("/znet")) {
+            this.add_znet_message();
+          } else {
+            this.send_message(message);
+          }
+        }
+        
+        
 
       delete_all_messages() {
         var parent = this;
@@ -102,6 +225,7 @@ window.onload = function() {
             console.error("Error removing messages: ", error);
           });
       }
+
       add_custom_message() {
         var parent = this;
       
@@ -118,7 +242,7 @@ window.onload = function() {
           // Set the custom message data in the database
           var customMessageData = {
             name: "ZNet",
-            message: "To keep the chat experience smooth and responsive for everyone, we periodically delete old messages once the chat reaches a certain limit. This helps us manage the chat efficiently and ensures that the ZNet runs optimally. All previous messages have been deleted. Feel free to continue the conversation!",
+            message: "To keep the chat experience smooth and responsive for everyone, we periodically delete old messages once the chat reaches a certain limit. This helps us manage the chat efficiently and ensures that ZNet runs optimally. All previous messages have been deleted. Feel free to continue the conversation!",
             timestamp: timestamp,
             index: index,
             sender: "ZNet_System",
@@ -135,9 +259,91 @@ window.onload = function() {
             });
         });
       }
+
+      add_znet_message() {
+        var parent = this;
+        
+        // Create a new timestamp for the message
+        var timestamp = Date.now();
+        
+        // Get the Firebase database reference
+        var chatsRef = db.ref('chats/');
+        
+        // Get the number of existing messages to determine the index
+        chatsRef.once('value', function(message_object) {
+          var index = parseFloat(message_object.numChildren()) + 1;
+          
+          // Set the custom message data in the database
+          var customMessageData = {
+            name: "ZNet",
+            message: "Nigga what u want",
+            timestamp: timestamp,
+            index: index,
+            sender: "ZNet_System",
+          };
+          
+          // Push the custom message data to the database
+          chatsRef.child(`message_${index}`).set(customMessageData)
+            .then(function() {
+              // After we send the chat, refresh to get the new messages
+              parent.refresh_chat();
+            })
+            .catch(function(error) {
+              console.error("Error adding custom message: ", error);
+            });
+        });
+      }
       
       
+      /*send_new_poll_message(userName, question) {
+        var parent = this;
     
+        // Create a new timestamp for the message
+        var timestamp = Date.now();
+    
+        // Get the Firebase database reference
+        var chatsRef = db.ref('chats/');
+    
+        // Get the number of existing messages to determine the index
+        chatsRef.once('value', function(message_object) {
+            var index = parseFloat(message_object.numChildren()) + 1;
+    
+            // Set the poll message data in the database
+            var pollMessageData = {
+                name: "ZNet",
+                message: `@${userName} has created a new poll: "${question}".`,
+                timestamp: timestamp,
+                index: index,
+                sender: "ZNet_System",
+            };
+    
+            // Push the poll message data to the database
+            chatsRef.child(`message_${index}`).set(pollMessageData)
+                .then(function() {
+                    // After we send the chat, refresh to get the new messages
+                    parent.refresh_chat();
+                })
+                .catch(function(error) {
+                    console.error("Error adding poll message: ", error);
+                });
+            });
+      }
+    
+      // Function to monitor the "polls" node
+      monitor_polls() {
+        var parent = this;
+        var pollsRef = db.ref('polls/');
+    
+        // Listen for new polls added to the "polls" node
+        pollsRef.on('child_added', function(snapshot) {
+            var poll = snapshot.val();
+            var userName = poll.userName;
+            var question = poll.question;
+    
+            // Send a message about the new poll
+            parent.send_new_poll_message(userName, question);
+        });
+      }*/
     
       banUser(userId) {
         return new Promise((resolve, reject) => {
@@ -192,7 +398,7 @@ window.onload = function() {
         });
       }
     
-      handleNewMessage(username, message) {
+      /*handleNewMessage(username, message) {
         // Get the current time
         const currentTime = Date.now();
     
@@ -222,7 +428,7 @@ window.onload = function() {
     
         // Process the new message
         this.send_message(message);
-      }
+      }*/
     
       updateTypingIndicator(username, isTyping) {
         // Find the typing indicator element for the given username
@@ -710,12 +916,20 @@ numMessagesOnPageFocus = 0;
     }
   });
 
+  var rulesPop = document.getElementById('rulesPopup');
+  var aboutPop = document.getElementById('aboutPopup');
+
   var pOverlay = document.getElementById('overlay');
   pOverlay.addEventListener('click', () => {
     participantsPopup.style.display = 'none';
     participantsPopup.style.zIndex = '1';
     pOverlay.style.display = 'none';
     pOverlay.style.zIndex = '1';
+    rulesPop.style.display = 'none';
+    aboutPop.style.display = 'none';
+    dumpPopup.style.display = 'none';
+    isDump = false;
+    sidebar_icon.style.display = 'block';
   });
 
   // Set up a real-time listener on the "users" node
@@ -966,6 +1180,7 @@ db.ref('users').on('value', (snapshot) => {
             chat_input_container.style.display = 'none';
             isPoll = false;
             sidebar_icon.style.display = 'none';
+            /*window.location.href = './Polls/polls.html';*/
         });
 
         var removePollsButton = document.getElementById('remove-polls');
@@ -978,12 +1193,36 @@ db.ref('users').on('value', (snapshot) => {
           sidebar_icon.style.display = 'block';
         });
 
-        document.getElementById('meet').addEventListener('click', function() {
+        /*document.getElementById('meet').addEventListener('click', function() {
           // Navigate to games.html in the same tab
           window.location.href = './Games/games.html';
-        });
-        /*
+        });*/
+
         var game = document.getElementById('meet');
+        var games = document.getElementById('games');
+        var isGame = true;
+
+        game.addEventListener('click', function() {
+          games.style.display = 'block';
+          game.style.background = '#565656';
+          game.style.paddingLeft = '16px';
+          chat_input_container.style.display = 'none';
+          isGame = false;
+          sidebar_icon.style.display = 'none';
+          /*window.location.href = './Polls/polls.html';*/
+        });
+
+        var removeGamesButton = document.getElementById('remove-games');
+        removeGamesButton.addEventListener('click', function() {
+          games.style.display = 'none';
+          game.style.background = '';
+          game.style.paddingLeft = '';
+          chat_input_container.style.display = '';
+          isGame = true;
+          sidebar_icon.style.display = 'block';
+        });
+        
+        /*var game = document.getElementById('meet');
         var games = document.getElementById('games');
         var isGame = true;
 
@@ -1004,6 +1243,20 @@ db.ref('users').on('value', (snapshot) => {
             sidebar_icon.style.display = 'block';
           };
         });*/
+
+        var dump = document.getElementById('meme');
+        var dumpPopup = document.getElementById('dump-coming-soon');
+        var isDump = true;
+
+        dump.addEventListener('click', function() {
+          dumpPopup.style.display = 'block';
+          isDump = false;
+          sidebar_icon.style.display = 'none';
+          overlay.style.display = 'block';
+          overlay.style.zIndex = '9996';
+          /*window.location.href = './Polls/polls.html';*/
+        });
+
 
         var overlay = document.getElementById('overlay');
         var spotify = document.getElementById('spotify');
@@ -1194,6 +1447,36 @@ db.ref('users').on('value', (snapshot) => {
             isLightMode = true; // Update mode
           }
         });
+
+        function toggleRulesPopup() {
+          const popup = document.getElementById('rulesPopup');
+          popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+          popup.style.zIndex = "9999"
+          overlay.style.display = "block";
+          overlay.style.zIndex = "9000";
+        }
+      
+        function toggleAboutPopup() {
+          const popup = document.getElementById('aboutPopup');
+          const overlay = document.getElementById('overlay');  // Assuming you have an element with id 'overlay'
+      
+          if (popup.style.display === 'block') {
+              popup.style.display = 'none';
+              popup.style.zIndex = "1";
+              overlay.style.display = 'none';
+              overlay.style.zIndex = "1";
+          } else {
+              popup.style.display = 'block';
+              popup.style.zIndex = "9999";
+              overlay.style.display = 'block';
+              overlay.style.zIndex = "9000";
+          }
+        }
+      
+        document.getElementById('rule').addEventListener('click', toggleRulesPopup);
+        document.getElementById('about').addEventListener('click', toggleAboutPopup);
+        document.getElementById('close-rules-btn').addEventListener('click', toggleRulesPopup);
+        document.getElementById('close-about-btn').addEventListener('click', toggleAboutPopup);
         
         var chat_input_send = document.createElement('button')
         chat_input_send.setAttribute('id', 'chat_input_send')
@@ -1212,7 +1495,7 @@ db.ref('users').on('value', (snapshot) => {
         var chat_input = document.createElement('textarea')
         chat_input.setAttribute('id', 'chat_input')
         // Only a max message length of 1000
-        chat_input.setAttribute('maxlength', 1000)
+        chat_input.setAttribute('maxlength', 10000)
         // Get the name of the user
         chat_input.placeholder = `${parent.get_name()}, join the conversation!`
 
@@ -1385,6 +1668,7 @@ db.ref('users').on('value', (snapshot) => {
           const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
           return `${formattedHours}:${formattedMinutes} ${ampm}, ${formattedDate}`;
         }
+
         var message_timestamp = document.createElement('p');
         message_timestamp.setAttribute('class', 'message_timestamp');
         message_timestamp.textContent = formatTimestamp(timestamp);
@@ -1398,7 +1682,7 @@ db.ref('users').on('value', (snapshot) => {
         message_content.setAttribute('class', 'message_content');
         message_content.textContent = `${message}`;
       
-        message_user_container.append(profileCircle, message_user, message_timestamp); // Append the timestamp after the name
+        message_user_container.append(profileCircle, message_user, message_timestamp);
         message_content_container.append(message_content);
         message_inner_container.append(message_user_container, message_content_container);
         message_container.append(message_inner_container);
@@ -1410,12 +1694,9 @@ db.ref('users').on('value', (snapshot) => {
      }
 
      updateTypingIndicator(username, isTyping) {
-      // Find the typing indicator element for the given username
       var typingIndicator = document.getElementById(`typing-indicator-${username}`);
       if (isTyping) {
-        // Show the typing indicator
         if (!typingIndicator) {
-          // Create a new typing indicator element
           typingIndicator = document.createElement('h2');
           typingIndicator.setAttribute('id', `typing-indicator-${username}`);
           typingIndicator.textContent = `${username} is typing...`;
@@ -1438,12 +1719,21 @@ db.ref('users').on('value', (snapshot) => {
           chat_input_container.appendChild(typingIndicator);
         }
         } else {
-        // Hide the typing indicator
           if (typingIndicator) {
           typingIndicator.remove();
           }
         }
       }
+
+      canSendMessage(username) {
+        const currentTime = Date.now();
+        if (this.lastMessageTime[username] && currentTime - this.lastMessageTime[username] < 10000) {
+          return false;
+        }
+        this.lastMessageTime[username] = currentTime;
+        return true;
+      }
+      
 
       // Save name. It literally saves the name to localStorage
       save_name(name){
@@ -1685,11 +1975,13 @@ function createProfile(name) {
   
     // So we've "built" our app. Let's make it work!!
     var app = new MEME_CHAT();
+    //app.monitor_polls();
     // If we have a name stored in localStorage.
     // Then use that name. Otherwise , if not.
     // Go to home.
     if(app.get_name() != null){
       app.chat();
+      app.loadUsers();
       parent.home();
     };
     //if (app.get_name() != null) {
