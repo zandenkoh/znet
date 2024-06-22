@@ -542,6 +542,10 @@ window.onload = function() {
             });
           }
         });
+
+        var join_help = document.createElement('p');
+        join_help.setAttribute('id', 'join_help');
+        join_help.textContent = 'Logging in requires a username with at least 5 letters, the correct password, and a selected class.';
       
         var join_label = document.createElement('h1');
         join_label.setAttribute('id', 'join_label');
@@ -643,6 +647,7 @@ window.onload = function() {
           
           if (username.length > 4 && password === '1class1voice' && userClass !== '' && !(await userExists(username))) {
             join_button.classList.add('enabled');
+            join_button.style.width = '50%';
             join_label.classList.add('color_enabled');
             join_inner_container.classList.add('border_enabled');
             join_button.onclick = async function () {
@@ -664,6 +669,7 @@ window.onload = function() {
             alertShown = false; // Reset alert flag when input is valid
           } else {
             join_button.classList.remove('enabled');
+            join_button.style.width = '45%';
             join_label.classList.remove('color_enabled');
             join_inner_container.classList.remove('border_enabled');
             join_button.onclick = null;
@@ -688,7 +694,7 @@ window.onload = function() {
         join_input_container.append(join_input);
         password_input_container.append(password_input);
         dropdown_container.append(dropdown);
-        join_inner_container.append(join_label, join_input_container, password_input_container, dropdown_container, join_button_container);
+        join_inner_container.append(join_label, join_input_container, password_input_container, dropdown_container, join_button_container, join_help);
         join_container.append(join_inner_container);
         document.body.append(join_container);
       }
@@ -723,9 +729,9 @@ window.onload = function() {
       // User is banned, display a message or redirect to a different page
       alert("You have been banned by an admin, please come back in 30 minutes.");
       return;
-    }
+    } 
 
-// Get the Firebase database reference
+/*// Get the Firebase database reference
 var chatsRef = db.ref('chats/');
 
 // Keep track of the total number of messages
@@ -775,7 +781,49 @@ window.addEventListener('blur', function() {
 });
 
 // Initialize numMessagesOnPageFocus to 0 when the page initially loads
-numMessagesOnPageFocus = 0;
+numMessagesOnPageFocus = 0;*/
+
+// Get the Firebase database reference
+var chatsRef = db.ref('chats/');
+
+// Flag to indicate if the user is currently on the page
+var onPage = true;
+
+// Function to update the badge notification with the sender's name
+function updateBadgeNotification(senderName) {
+  if (onPage) {
+    document.title = `ZNet`;
+  } else {
+    document.title = `${senderName} sent a new message! | ZNet`;
+  }
+}
+
+// Listen for changes in the "chats" node
+chatsRef.on('child_added', function(snapshot) {
+  var message = snapshot.val();
+  
+  // Check if the user is not on the page and the message is new
+  if (!onPage) {
+    var senderName = message.name || 'Someone'; // Fallback to 'Someone' if name is not available
+    updateBadgeNotification(senderName);
+  }
+});
+
+// Event listener for when the page gains focus
+window.addEventListener('focus', function() {
+  onPage = true;
+  updateBadgeNotification('');
+});
+
+// Event listener for when the page loses focus
+window.addEventListener('blur', function() {
+  onPage = false;
+});
+
+// Set the initial title
+document.title = `ZNet`;
+
+
 
       // Get the Firebase database reference
       var chatsRef = db.ref('chats/');
@@ -803,17 +851,17 @@ numMessagesOnPageFocus = 0;
         var banButton = document.createElement('button');
         banButton.setAttribute('id', 'ban_button');
         banButton.innerHTML = '<i class="fa-solid fa-user-slash"></i>';
-        banButton.style.right = '20px';
-        banButton.style.top = '2.5%';
-        banButton.style.width = '50px';
-        banButton.style.height = '50px';
-        banButton.style.fontSize = '16px';
+        banButton.style.right = '11px';
+        banButton.style.top = '11px';
+        banButton.style.width = '45px';
+        banButton.style.height = '45px';
+        banButton.style.fontSize = '14px';
         banButton.style.zIndex = '120';
         //banButton.style.transform = 'translate(-50%, -50%)';
         banButton.style.position = 'absolute';
-        banButton.style.color = '#ffffff';
-        banButton.style.background = '#000000';
-        //banButton.style.border = '1px solid #ffffff';
+        banButton.style.color = '#000';
+        banButton.style.background = '#fff';
+        banButton.style.border = '1px solid #000';
         banButton.style.borderRadius = '10px';
         banButton.style.transition = '0.6s ease';
         banButton.style.display = 'none';
