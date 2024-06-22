@@ -250,6 +250,11 @@ body {
   border: 1px solid #727272;
 }
 
+#join_inner_container:hover #join_help {
+  opacity: 1;
+  bottom: -5%;
+}
+
 #join_label {
   font-family: 'Varela Round', sans-serif;
   margin-top: 5px;
@@ -320,7 +325,7 @@ body {
   color: #6d6d6d;
   border-radius: 40px;
   margin-top: 80px;
-  transition: background-color color ease 0.5s;
+  transition: ease 0.5s;
 }
 
 #join_button:hover + #join_inner_container {
@@ -425,6 +430,22 @@ body {
   color: #000;
 }
 
+#join_help {
+  color: #00000097;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: 100;
+  position: absolute;
+  bottom: -2.5%;
+  text-align: center;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 10;
+  white-space: nowrap;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* Greeting Styles */
 #greeting_container {
   background-color: #ffffff;
@@ -472,9 +493,10 @@ body {
   bottom: 0;
   float: left;
   overflow-y: auto;
+  overflow-x: hidden;
   font-family: 'Varela Round', sans-serif;
   padding-left: 50px;
-  padding-right: 15px;
+  padding-right: 50px;
   padding-top: 15px;
   padding-bottom: 90px;
   margin-top: 0px;
@@ -1474,7 +1496,7 @@ body {
   transition: height 0.3s ease; /* Add this line for smooth height transition */
   position: relative;
   margin-bottom: 30px;
-  width: 95%;
+  width: 100%;
   min-width: 0;
   white-space: pre-wrap;
   margin-left: 10px;
@@ -1573,7 +1595,7 @@ body {
   /*color: #095495;*/
   color: var(--message-user-color, #393939);
   font-weight: 900;
-  user-select: none;
+  /*user-select: none;*/
   padding-top: 20px;
 }
 
@@ -1675,7 +1697,6 @@ body {
     background-color: #000000;
 
     cursor: pointer;
-
 
   }
 
@@ -1881,6 +1902,26 @@ body {
   #join_inner_container:focus-within {
     border: none;
   }
+  #join_help {
+    color: #00000097;
+    font-family: Verdana;
+    font-size: 10px;
+    font-weight: 100;
+    position: absolute;
+    bottom: 10%;
+    width: 80vw;
+    text-align: center;
+    opacity: 1;
+    white-space: wrap;
+    transition: 0.3s ease;
+    z-index: 10;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  #join_inner_container:hover #join_help {
+    opacity: 1;
+    bottom: 10%;
+  }
   #join_button:active {
     opacity: 0.7;
   }
@@ -2074,7 +2115,7 @@ body {
   width: 725px;
   background-color: #ffffff;
   padding: 20px 30px;
-  border-radius: 10px;
+  border-radius: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
   left: 50%;
@@ -2094,6 +2135,7 @@ body {
 .advertising-rules p {
   font-weight: 100;
   user-select: text;
+  line-height: 25px;
 }
 
 .ads-content {
