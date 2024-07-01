@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
   document.style.zoom = "90%";
-  // Get the close button and advertisement elements
   var closeBtn = document.getElementById("closeBtn");
   var advertisement = document.getElementById("advertisement");
   var progressBar = document.getElementById("progressBar");
