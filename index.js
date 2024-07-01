@@ -55,8 +55,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }, 46); // Adjust the speed of the progress bar here
 }); 
 
-
-
 document.addEventListener('contextmenu', event => event.preventDefault());
 // We enclose this in window.onload.
 // So we don't have ridiculous errors.
@@ -86,13 +84,13 @@ window.onload = function() {
      
     // This is very IMPORTANT!! We're going to use "db" a lot.
     var db = firebase.database()
+
     // We're going to use oBjEcT OrIeNtEd PrOgRaMmInG. Lol
     class MEME_CHAT{
 
       constructor() {
         this.lastMessageTime = {};
         this.bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || {};
-
         this.users = {}; // To store user data locally
         this.currentUser = localStorage.getItem('name');
       }
@@ -103,12 +101,34 @@ window.onload = function() {
         this.renderUsers();
       }
       
-      getRandomMessage() {
-        const randomIndex = Math.floor(Math.random() * botMessages.length);
-        return botMessages[randomIndex];
+      isFollowing(username) {
+        const user = this.users[this.currentUser];
+        return user && user.following && user.following.includes(username);
+      }
+    
+      async toggleFollow(event, username) {
+        const button = event.target;
+        const currentUserData = this.users[this.currentUser];
+        const isCurrentlyFollowing = this.isFollowing(username);
+    
+        if (isCurrentlyFollowing) {
+            // Unfollow
+            const newFollowing = currentUserData.following.filter(user => user !== username);
+            const newFollowers = this.users[username].followers.filter(user => user !== this.currentUser);
+            await db.ref(`users/${this.currentUser}/following`).set(newFollowing);
+            await db.ref(`users/${username}/followers`).set(newFollowers);
+        } else {
+            // Follow
+            const newFollowing = [...(currentUserData.following || []), username];
+            const newFollowers = [...(this.users[username].followers || []), this.currentUser];
+            await db.ref(`users/${this.currentUser}/following`).set(newFollowing);
+            await db.ref(`users/${username}/followers`).set(newFollowers);
+        }
+        // Reload users to update UI
+        this.loadUsers();
       }
 
-      renderUsers() {
+      renderParticipants() {
         const participantsContainer = document.getElementById('participants');
         participantsContainer.innerHTML = ''; // Clear existing users
         for (const [username, userData] of Object.entries(this.users)) {
@@ -118,57 +138,11 @@ window.onload = function() {
             userElement.innerHTML = `
                 <span class="profile-circle">${username.charAt(0).toUpperCase()}</span>
                 <span class="username">${username}</span>
-                <button class="follow-button">${this.isFollowing(username) ? 'Unfollow' : 'Follow'}</button>
+                <button class="follow-button">${this.isFollowing(username) ? 'Following' : 'Follow'}</button>
             `;
-            userElement.querySelector('.username').addEventListener('click', () => this.showProfile(username));
             userElement.querySelector('.follow-button').addEventListener('click', (e) => this.toggleFollow(e, username));
             participantsContainer.appendChild(userElement);
         }
-      }
-
-      isFollowing(username) {
-        const user = this.users[this.currentUser];
-        return user && user.following && user.following.includes(username);
-      }
-
-      async toggleFollow(event, username) {
-        const button = event.target;
-        const currentUserData = this.users[this.currentUser];
-        const isCurrentlyFollowing = this.isFollowing(username);
-
-        if (isCurrentlyFollowing) {
-            // Unfollow
-            await db.ref(`users/${this.currentUser}/following`).set(currentUserData.following.filter(user => user !== username));
-            await db.ref(`users/${username}/followers`).set(this.users[username].followers.filter(user => user !== this.currentUser));
-        } else {
-            // Follow
-            await db.ref(`users/${this.currentUser}/following`).set([...(currentUserData.following || []), username]);
-            await db.ref(`users/${username}/followers`).set([...(this.users[username].followers || []), this.currentUser]);
-        }
-        // Reload users to update UI
-        this.loadUsers();
-      }
-
-      async showProfile(username) {
-        const user = this.users[username];
-        if (!user) return;
-
-        const profilePopup = document.createElement('div');
-        profilePopup.classList.add('profile-popup');
-        profilePopup.innerHTML = `
-            <div class="profile-circle">${username.charAt(0).toUpperCase()}</div>
-            <div class="username">${username}</div>
-            <div class="followers">Followers: ${user.followers ? user.followers.length : 0}</div>
-            <div class="following">Following: ${user.following ? user.following.length : 0}</div>
-        `;
-
-        // Close button
-        const closeButton = document.createElement('button');
-        closeButton.textContent = 'Close';
-        closeButton.addEventListener('click', () => profilePopup.remove());
-        profilePopup.appendChild(closeButton);
-
-        document.body.appendChild(profilePopup);
       }
       
       /*handleNewMessage(username, message) {
@@ -186,6 +160,7 @@ window.onload = function() {
     
         this.send_message(message);
       }*/
+
     
         handleNewMessage(username, message) {
           const currentTime = Date.now();
@@ -645,7 +620,7 @@ window.onload = function() {
           let password = password_input.value;
           let userClass = dropdown.value;
           
-          if (username.length > 4 && password === '1class1voice' && userClass !== '' && !(await userExists(username))) {
+          if (username.length > 3 && password === '1class1voice' && userClass !== '' && !(await userExists(username))) {
             join_button.classList.add('enabled');
             join_button.style.width = '50%';
             join_label.classList.add('color_enabled');
@@ -877,7 +852,7 @@ document.title = `ZNet`;
         });
 
           // Function to create the profile circle
-  function createProfileCircle(name) {
+  /*function createProfileCircle(name) {
     var profileCircle = document.createElement('div');
     profileCircle.setAttribute('class', 'profile-circle');
 
@@ -943,11 +918,11 @@ document.title = `ZNet`;
   searchInput.setAttribute('type', 'text');
   searchInput.setAttribute('id', 'participants_search');
   searchInput.setAttribute('placeholder', 'Search members...');
-  searchInput.style.width = 'calc(100% - 20px)';
+  searchInput.style.width = '100%';
   searchInput.style.padding = '10px';
-  searchInput.style.margin = '10px 10px 0 10px';
-  searchInput.style.border = '1px solid #ccc';
-  searchInput.style.borderRadius = '5px';
+  searchInput.style.margin = '10px 0 0 0';
+  searchInput.style.border = '1px solid #b8b8b8';
+  searchInput.style.borderRadius = '5px';  
 
   var participantsLine = document.createElement('hr');
 
@@ -1022,8 +997,9 @@ db.ref('users').on('value', (snapshot) => {
       const listItem = document.createElement('li');
       listItem.style.display = 'flex';
       listItem.style.alignItems = 'center';
-      listItem.style.marginBottom = '10px';
+      listItem.style.marginBottom = '15px';
       listItem.style.fontSize = '14px';
+      listItem.classList.add('user-list');
 
       const profileCircle = createProfileCircle(userData.name); // Pass the full name
       listItem.appendChild(profileCircle);
@@ -1037,6 +1013,11 @@ db.ref('users').on('value', (snapshot) => {
       userClass.textContent = userData.class; // Assuming the user object has a 'class' attribute
       userClass.classList.add('user-class');
       listItem.appendChild(userClass);
+
+      const followUser = document.createElement('button');
+      followUser.textContent = 'Follow';
+      followUser.classList.add('follow-user');
+      listItem.appendChild(followUser);
 
       participantsList.appendChild(listItem);
   });
@@ -1076,7 +1057,236 @@ db.ref('users').on('value', (snapshot) => {
     dumpPopup.style.display = 'none';
     isDump = false;
     sidebar_icon.style.display = 'block';
+  });*/
+
+
+// Function to create the profile circle
+function createProfileCircle(name) {
+  var profileCircle = document.createElement('div');
+  profileCircle.setAttribute('class', 'profile-circle');
+
+  var hue = (name.charCodeAt(0) * 137.508) % 200;
+  hue = (hue + 200) % 360;
+  profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`;
+
+  profileCircle.textContent = name.charAt(0).toUpperCase();
+  return profileCircle;
+}
+
+// Create the participants button
+var participantsButton = document.getElementById('users');
+var participantsButtonText = participantsButton.querySelector('.text');
+
+// Create the participants popup
+var participantsPopup = document.createElement('div');
+participantsPopup.setAttribute('id', 'participants_popup');
+participantsPopup.style.position = 'fixed';
+participantsPopup.style.top = '50%';
+participantsPopup.style.left = '50%';
+participantsPopup.style.transform = 'translate(-50%, -50%)';
+participantsPopup.style.width = '675px';
+participantsPopup.style.height = '450px';
+participantsPopup.style.backgroundColor = '#ffffff';
+participantsPopup.style.padding = '0 20px 0 20px';
+participantsPopup.style.borderRadius = '15px';
+participantsPopup.style.zIndex = '6000';
+participantsPopup.style.display = 'none';
+participantsPopup.style.overflowY = 'scroll';
+participantsPopup.style.overflowX = 'hidden';
+participantsPopup.style.fontFamily = 'Varela Round';
+
+var participantsTitle = document.createElement('h2');
+participantsTitle.style.fontSize = '18px';
+participantsTitle.style.padding = '25px 0 20px 25px';
+participantsTitle.style.borderBottom = '2px solid #b8b8b8';
+participantsTitle.style.width = 'calc(100% + 40px)';
+participantsTitle.style.marginLeft = '-20px';
+participantsTitle.style.position = 'sticky';
+participantsTitle.style.top = '0';
+participantsTitle.style.zIndex = '10';
+participantsTitle.style.background = '#ffffff';
+participantsTitle.style.display = 'block';
+
+var searchInput = document.createElement('input');
+searchInput.setAttribute('type', 'text');
+searchInput.setAttribute('id', 'participants_search');
+searchInput.setAttribute('placeholder', 'Search members...');
+searchInput.style.width = '100%';
+searchInput.style.padding = '10px';
+searchInput.style.margin = '10px 0 0 0';
+searchInput.style.border = '1px solid #b8b8b8';
+searchInput.style.borderRadius = '5px';
+
+var participantsLine = document.createElement('hr');
+
+var participantsList = document.createElement('ul');
+participantsList.style.listStyleType = 'none';
+participantsList.style.padding = '20px 0 10px 0';
+
+participantsPopup.append(participantsTitle, searchInput, participantsLine, participantsList);
+
+// Add event listener to the participants button
+participantsButton.addEventListener('click', () => {
+  if (participantsPopup.style.display === 'none') {
+    participantsPopup.style.display = 'block';
+    participantsPopup.style.zIndex = '9999';
+    overlay.style.display = 'block';
+    overlay.style.zIndex = '9000';
+  } else {
+    participantsPopup.style.display = 'none';
+    overlay.style.display = 'none';
+    participantsPopup.style.zIndex = '';
+    overlay.style.zIndex = '';
+  }
+});
+
+searchInput.addEventListener('input', () => {
+  const searchTerm = searchInput.value.toLowerCase();
+  const listItems = participantsList.getElementsByTagName('li');
+
+  for (let i = 0; i < listItems.length; i++) {
+    const item = listItems[i];
+    const userName = item.querySelector('.user-name').textContent.toLowerCase();
+    const userClass = item.querySelector('.user-class').textContent.toLowerCase();
+
+    if (userName.includes(searchTerm) || userClass.includes(searchTerm)) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  }
+});
+
+// Set up a real-time listener on the "users" node
+db.ref('users').on('value', (snapshot) => {
+  const usersData = snapshot.val();
+  const users = Object.keys(usersData);
+
+  // Sort users by class
+  users.sort((userKey1, userKey2) => {
+    const userClass1 = usersData[userKey1].class;
+    const userClass2 = usersData[userKey2].class;
+
+    // Example sorting logic: Sort by class in ascending order
+    return userClass1.localeCompare(userClass2);
   });
+
+  const numParticipants = users.length;
+
+  // Update the participants button text
+  participantsButtonText.innerHTML = `Members | ${numParticipants}`;
+  participantsTitle.innerHTML = `${numParticipants} Members`;
+
+  // Update the participants list
+  participantsList.innerHTML = '';
+  participantsList.style.zIndex = '5';
+
+  users.forEach((userKey) => {
+    const userData = usersData[userKey];
+    const listItem = document.createElement('li');
+    listItem.style.display = 'flex';
+    listItem.style.alignItems = 'center';
+    listItem.style.marginBottom = '15px';
+    listItem.style.fontSize = '14px';
+    listItem.classList.add('user-list');
+
+    const profileCircle = createProfileCircle(userData.name); // Pass the full name
+    listItem.appendChild(profileCircle);
+
+    const userName = document.createElement('span');
+    userName.textContent = userData.name; // Assuming the user object has a 'name' attribute
+    userName.classList.add('user-name');
+    listItem.appendChild(userName);
+
+    const userClass = document.createElement('span');
+    userClass.textContent = userData.class; // Assuming the user object has a 'class' attribute
+    userClass.classList.add('user-class');
+    listItem.appendChild(userClass);
+
+    const followUser = document.createElement('button');
+    followUser.textContent = 'Follow';
+    followUser.classList.add('follow-user');
+    listItem.appendChild(followUser);
+
+    // Retrieve the follower's name from local storage
+    const followerName = localStorage.getItem('name');
+
+    // Check if the user is already following
+    if (userData.followers && userData.followers[followerName]) {
+      followUser.textContent = 'Following';
+      followUser.classList.remove('follow-user');
+      followUser.classList.add('following-user');
+    }
+
+    // Add event listener to follow button
+    followUser.addEventListener('click', () => {
+      const userId = userKey;
+      const followersRef = db.ref(`users/${userId}/followers/${followerName}`);
+
+      if (followUser.textContent === 'Follow') {
+        followersRef.set(true).then(() => {
+          followUser.textContent = 'Following';
+          followUser.classList.remove('follow-user');
+          followUser.classList.add('following-user');
+        }).catch((error) => {
+          console.error('Error updating followers:', error);
+        });
+      } else {
+        followersRef.remove().then(() => {
+          followUser.textContent = 'Follow';
+          followUser.classList.remove('following-user');
+          followUser.classList.add('follow-user');
+        }).catch((error) => {
+          console.error('Error updating followers:', error);
+        });
+      }
+    });
+
+    participantsList.appendChild(listItem);
+  });
+});
+
+var style = document.createElement('style');
+style.innerHTML = `
+  .profile-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+`;
+document.head.appendChild(style);
+
+
+
+
+
+
+
+var rulesPop = document.getElementById('rulesPopup');
+var aboutPop = document.getElementById('aboutPopup');
+
+var pOverlay = document.getElementById('overlay');
+pOverlay.addEventListener('click', () => {
+  participantsPopup.style.display = 'none';
+  participantsPopup.style.zIndex = '1';
+  pOverlay.style.display = 'none';
+  pOverlay.style.zIndex = '1';
+  rulesPop.style.display = 'none';
+  aboutPop.style.display = 'none';
+  dumpPopup.style.display = 'none';
+  isDump = false;
+  sidebar_icon.style.display = 'block';
+});
+
+
 
         // GET THAT MEMECHAT HEADER OUTTA HERE
         var title_container = document.getElementById('title_container')
@@ -2065,20 +2275,20 @@ function createProfile(name) {
       // Delete all existing messages from the database
       //app.delete_all_messages();
     //}
-  };
+};
 
-  window.addEventListener("load", function () {
-    // Hide loading screen when everything is loaded
-    var loadingScreen = document.getElementById("loadingScreen");
-    var content = document.getElementById("content");
+window.addEventListener("load", function () {
+  // Hide loading screen when everything is loaded
+  var loadingScreen = document.getElementById("loadingScreen");
+  var content = document.getElementById("content");
 
-    loadingScreen.style.transition = "opacity 0.5s";
-    loadingScreen.style.opacity = "0";
+  loadingScreen.style.transition = "opacity 0.5s";
+  loadingScreen.style.opacity = "0";
 
-    // After fade out, set display to none
-    setTimeout(function() {
-        loadingScreen.style.display = "none";
-        content.style.display = "block"; // Show content
-    }, 500); // 0.5 seconds transition
+  // After fade out, set display to none
+  setTimeout(function() {
+      loadingScreen.style.display = "none";
+      content.style.display = "block"; // Show content
+  }, 500); // 0.5 seconds transition
 
 });
