@@ -839,7 +839,7 @@ document.title = `ZNet`;
         banButton.style.border = '1px solid #000';
         banButton.style.borderRadius = '10px';
         banButton.style.transition = '0.6s ease';
-        //banButton.style.display = 'none';
+        banButton.style.display = 'none';
 
         banButton.addEventListener('click', () => {
           // Get the username of the user to be banned
