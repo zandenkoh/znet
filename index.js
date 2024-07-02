@@ -1,5 +1,6 @@
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function() {
   document.style.zoom = "90%";
+  // Get the close button and advertisement elements
   var closeBtn = document.getElementById("closeBtn");
   var advertisement = document.getElementById("advertisement");
   var progressBar = document.getElementById("progressBar");
@@ -838,7 +839,7 @@ document.title = `ZNet`;
         banButton.style.border = '1px solid #000';
         banButton.style.borderRadius = '10px';
         banButton.style.transition = '0.6s ease';
-        banButton.style.display = 'none';
+        //banButton.style.display = 'none';
 
         banButton.addEventListener('click', () => {
           // Get the username of the user to be banned
@@ -1058,8 +1059,340 @@ db.ref('users').on('value', (snapshot) => {
     sidebar_icon.style.display = 'block';
   });*/
 
-
 // Function to create the profile circle
+function createProfileCircle(name) {
+  var profileCircle = document.createElement('div');
+  profileCircle.setAttribute('class', 'profile-circle');
+
+  var hue = (name.charCodeAt(0) * 137.508) % 200;
+  hue = (hue + 200) % 360;
+  profileCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`;
+
+  profileCircle.textContent = name.charAt(0).toUpperCase();
+  return profileCircle;
+}
+
+// Create the participants button
+var participantsButton = document.getElementById('users');
+var participantsButtonText = participantsButton.querySelector('.text');
+
+// Create the participants popup
+var participantsPopup = document.createElement('div');
+participantsPopup.setAttribute('id', 'participants_popup');
+participantsPopup.style.position = 'fixed';
+participantsPopup.style.top = '50%';
+participantsPopup.style.left = '50%';
+participantsPopup.style.transform = 'translate(-50%, -50%)';
+participantsPopup.style.width = '675px';
+participantsPopup.style.height = '450px';
+participantsPopup.style.backgroundColor = '#ffffff';
+participantsPopup.style.padding = '0 20px 0 20px';
+participantsPopup.style.borderRadius = '15px';
+participantsPopup.style.zIndex = '6000';
+participantsPopup.style.display = 'none';
+participantsPopup.style.overflowY = 'scroll';
+participantsPopup.style.overflowX = 'hidden';
+participantsPopup.style.fontFamily = 'Varela Round';
+
+var participantsTitle = document.createElement('h2');
+participantsTitle.style.fontSize = '18px';
+participantsTitle.style.padding = '25px 0 20px 25px';
+participantsTitle.style.borderBottom = '2px solid #b8b8b8';
+participantsTitle.style.width = 'calc(100% + 40px)';
+participantsTitle.style.marginLeft = '-20px';
+participantsTitle.style.position = 'sticky';
+participantsTitle.style.top = '0';
+participantsTitle.style.zIndex = '10';
+participantsTitle.style.background = '#ffffff';
+participantsTitle.style.display = 'block';
+
+var searchInput = document.createElement('input');
+searchInput.setAttribute('type', 'text');
+searchInput.setAttribute('id', 'participants_search');
+searchInput.setAttribute('placeholder', 'Search members...');
+searchInput.style.width = '100%';
+searchInput.style.padding = '10px';
+searchInput.style.margin = '10px 0 0 0';
+searchInput.style.border = '1px solid #b8b8b8';
+searchInput.style.borderRadius = '5px';
+
+var participantsLine = document.createElement('hr');
+
+var participantsList = document.createElement('ul');
+participantsList.style.listStyleType = 'none';
+participantsList.style.padding = '20px 0 10px 0';
+
+participantsPopup.append(participantsTitle, searchInput, participantsLine, participantsList);
+
+// Create the profile page within the popup
+var profilePage = document.createElement('div');
+profilePage.setAttribute('id', 'profile_page');
+profilePage.style.display = 'none';
+profilePage.style.padding = '20px';
+
+var backButton = document.createElement('button');
+backButton.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+backButton.classList.add('back_button');
+backButton.addEventListener('click', () => {
+  profilePage.style.display = 'none';
+  participantsTitle.style.display = 'block';
+  searchInput.style.display = 'block';
+  participantsLine.style.display = 'block';
+  participantsList.style.display = 'block';
+});
+
+participantsPopup.appendChild(backButton);
+
+var proCircle = document.createElement('div');
+proCircle.setAttribute('class', 'profile-circle');
+proCircle.style.marginBottom = '10px';
+
+var proName = document.createElement('h2');
+proName.style.fontSize = '24px';
+proName.style.marginBottom = '10px';
+
+var profileFollowers = document.createElement('p');
+profileFollowers.style.fontSize = '16px';
+profileFollowers.style.color = '#666';
+
+var profileFollowButton = document.createElement('button');
+profileFollowButton.style.marginTop = '30px';
+profileFollowButton.style.padding = '10px 20px';
+profileFollowButton.style.fontSize = '16px';
+profileFollowButton.classList.add('profile-follow-user');
+
+profilePage.append(proCircle, proName, profileFollowers, profileFollowButton);
+
+participantsPopup.appendChild(profilePage);
+
+document.body.appendChild(participantsPopup);
+
+// Add event listener to the participants button
+participantsButton.addEventListener('click', () => {
+  if (participantsPopup.style.display === 'none') {
+    participantsPopup.style.display = 'block';
+    participantsPopup.style.zIndex = '9999';
+    overlay.style.display = 'block';
+    overlay.style.zIndex = '9000';
+  } else {
+    participantsPopup.style.display = 'none';
+    overlay.style.display = 'none';
+    participantsPopup.style.zIndex = '';
+    overlay.style.zIndex = '';
+  }
+});
+
+searchInput.addEventListener('input', () => {
+  const searchTerm = searchInput.value.toLowerCase();
+  filterParticipantsList(searchTerm);
+});
+
+// Function to filter participants list based on search term
+function filterParticipantsList(searchTerm) {
+  const listItems = participantsList.getElementsByTagName('li');
+  for (let i = 0; i < listItems.length; i++) {
+    const item = listItems[i];
+    const userName = item.querySelector('.user-name').textContent.toLowerCase();
+    const userClass = item.querySelector('.user-class').textContent.toLowerCase();
+
+    if (userName.includes(searchTerm) || userClass.includes(searchTerm)) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  }
+}
+
+// Function to update the participants list
+function updateParticipantsList(usersData) {
+  const users = Object.keys(usersData);
+
+  // Sort users by class
+  users.sort((userKey1, userKey2) => {
+    const userClass1 = usersData[userKey1].class;
+    const userClass2 = usersData[userKey2].class;
+
+    // Example sorting logic: Sort by class in ascending order
+    return userClass1.localeCompare(userClass2);
+  });
+
+  const numParticipants = users.length;
+
+  // Update the participants button text
+  participantsButtonText.innerHTML = `Members | ${numParticipants}`;
+  participantsTitle.innerHTML = `${numParticipants} Members`;
+
+  // Update the participants list
+  participantsList.innerHTML = '';
+  participantsList.style.zIndex = '5';
+
+  users.forEach((userKey) => {
+    const userData = usersData[userKey];
+    const listItem = document.createElement('li');
+    listItem.style.display = 'flex';
+    listItem.style.alignItems = 'center';
+    listItem.style.marginBottom = '15px';
+    listItem.style.fontSize = '14px';
+    listItem.classList.add('user-list');
+
+    const profileCircle = createProfileCircle(userData.name); // Pass the full name
+    listItem.appendChild(profileCircle);
+
+    const userName = document.createElement('span');
+    userName.textContent = userData.name; // Assuming the user object has a 'name' attribute
+    userName.classList.add('user-name');
+    listItem.appendChild(userName);
+
+    const userClass = document.createElement('span');
+    userClass.textContent = userData.class; // Assuming the user object has a 'class' attribute
+    userClass.classList.add('user-class');
+    listItem.appendChild(userClass);
+
+    const followUser = document.createElement('button');
+    followUser.textContent = 'Follow';
+    followUser.classList.add('follow-user');
+    listItem.appendChild(followUser);
+
+    // Retrieve the follower's name from local storage
+    const followerName = localStorage.getItem('name');
+
+    // Check if the user is already following
+    if (userData.followers && userData.followers[followerName]) {
+      followUser.textContent = 'Following';
+      followUser.classList.remove('follow-user');
+      followUser.classList.add('following-user');
+    }
+
+    // Add event listener to follow button
+    followUser.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const userId = userKey;
+      const followersRef = db.ref(`users/${userId}/followers/${followerName}`);
+
+      if (followUser.textContent === 'Follow') {
+        followersRef.set(true).then(() => {
+          followUser.textContent = 'Following';
+          followUser.classList.remove('follow-user');
+          followUser.classList.add('following-user');
+        }).catch((error) => {
+          console.error('Error updating followers:', error);
+        });
+      } else {
+        followersRef.remove().then(() => {
+          followUser.textContent = 'Follow';
+          followUser.classList.remove('following-user');
+          followUser.classList.add('follow-user');
+        }).catch((error) => {
+          console.error('Error updating followers:', error);
+        });
+      }
+    });
+
+    // Add event listener to list item for profile view
+    listItem.addEventListener('click', () => {
+      participantsTitle.style.display = 'none';
+      searchInput.style.display = 'none';
+      participantsLine.style.display = 'none';
+      participantsList.style.display = 'none';
+      profilePage.style.display = 'block';
+
+      /*proCircle.textContent = userData.name.charAt(0).toUpperCase();
+      proCircle.style.backgroundColor = `hsl(${(userData.name.charCodeAt(0) * 137.508) + 200 % 360}, 70%, 70%)`;
+      proName.textContent = userData.name;*/
+      var hue = (userData.name.charCodeAt(0) * 137.508) % 360;
+      hue = (hue + 200) % 360;
+      proCircle.textContent = userData.name.charAt(0).toUpperCase();
+      proCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`;
+      proName.textContent = userData.name;
+
+
+      // Fetch and display the number of followers
+      var followersCount = userData.followers ? Object.keys(userData.followers).length : 0;
+      profileFollowers.textContent = `${followersCount} followers`;
+
+      // Set follow button state
+      if (userData.followers && userData.followers[followerName]) {
+        profileFollowButton.textContent = 'Following';
+        profileFollowButton.classList.remove('profile-follow-user');
+        profileFollowButton.classList.add('profile-following-user');
+      } else {
+        profileFollowButton.textContent = 'Follow';
+        profileFollowButton.classList.remove('profile-following-user');
+        profileFollowButton.classList.add('profile-follow-user');
+      }
+
+      // Add follow button event listener
+      profileFollowButton.onclick = () => {
+        const followersRef = db.ref(`users/${userKey}/followers/${followerName}`);
+
+        if (profileFollowButton.textContent === 'Follow') {
+          followersRef.set(true).then(() => {
+            profileFollowButton.textContent = 'Following';
+            profileFollowButton.classList.remove('profile-follow-user');
+            profileFollowButton.classList.add('profile-following-user');
+            updateFollowersCount(userKey);
+          }).catch((error) => {
+            console.error('Error updating followers:', error);
+          });
+        } else {
+          followersRef.remove().then(() => {
+            profileFollowButton.textContent = 'Follow';
+            profileFollowButton.classList.remove('profile-following-user');
+            profileFollowButton.classList.add('profile-follow-user');
+            updateFollowersCount(userKey);
+          }).catch((error) => {
+            console.error('Error updating followers:', error);
+          });
+        }
+      };
+    });
+
+    participantsList.appendChild(listItem);
+  });
+}
+
+// Function to update the followers count in profile view
+function updateFollowersCount(userKey) {
+  db.ref(`users/${userKey}`).once('value').then((snapshot) => {
+    const userData = snapshot.val();
+    const followersCount = userData.followers ? Object.keys(userData.followers).length : 0;
+    profileFollowers.textContent = `${followersCount} followers`;
+  });
+}
+
+// Set up a real-time listener on the "users" node
+db.ref('users').on('value', (snapshot) => {
+  const usersData = snapshot.val();
+  updateParticipantsList(usersData);
+
+  // Reapply the search filter after the participants list is updated
+  const searchTerm = searchInput.value.toLowerCase();
+  filterParticipantsList(searchTerm);
+});
+
+var style = document.createElement('style');
+style.innerHTML = `
+  .profile-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  .user-list {
+    cursor: pointer;
+  }
+`;
+document.head.appendChild(style);
+
+
+/*// Function to create the profile circle
 function createProfileCircle(name) {
   var profileCircle = document.createElement('div');
   profileCircle.setAttribute('class', 'profile-circle');
@@ -1261,7 +1594,7 @@ style.innerHTML = `
     margin-right: 10px;
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(style);*/
 
 
 
