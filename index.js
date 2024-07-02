@@ -1,4 +1,4 @@
-  document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
   document.style.zoom = "90%";
   // Get the close button and advertisement elements
   var closeBtn = document.getElementById("closeBtn");
@@ -1157,8 +1157,8 @@ profileFollowers.style.color = '#666';
 
 var profileFollowButton = document.createElement('button');
 profileFollowButton.style.marginTop = '30px';
-profileFollowButton.style.padding = '10px 20px';
-profileFollowButton.style.fontSize = '16px';
+profileFollowButton.style.padding = '8px 35px';
+profileFollowButton.style.fontSize = '15px';
 profileFollowButton.classList.add('profile-follow-user');
 
 profilePage.append(proCircle, proName, profileFollowers, profileFollowButton);
