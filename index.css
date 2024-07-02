@@ -1050,6 +1050,60 @@ body {
   cursor: pointer;
 }
 
+
+#profile_page {
+  text-align: center;
+}
+
+.back_button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 20px;
+  background: none;
+}
+
+.back_button:hover {
+  cursor: pointer;
+}
+
+#profile_page .profile-circle {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  margin-top: 90px;
+}
+
+.profile-follow-user {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #0199fe;
+  border-radius: 7px;
+  padding: 7px 38px;
+  /*position: absolute;
+  right: 24px;*/
+}
+
+.profile-follow-user:hover {
+  cursor: pointer;
+}
+
+.profile-following-user {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  background: #efefef;
+  border-radius: 7px;
+  padding: 7px 18px;
+  /*position: absolute;
+  right: 24px;*/
+}
+
+.profile-following-user:hover {
+  cursor: pointer;
+}
+
 .user-list:hover {
   background: #fafafa;
   border-radius: 50px 20px 20px 50px;
