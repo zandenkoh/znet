@@ -354,7 +354,7 @@ body {
 
   .skip-button {
     background: none;
-    border: 1px solid #858585;
+    border: 1px solid #00000036;
     color: #333;
     padding: 8px 16px;
     text-align: center;
@@ -377,3 +377,10 @@ body {
     color: #000;
     background: none;
   }
+
+
+
+
+
+
+
