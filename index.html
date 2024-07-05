@@ -38,7 +38,7 @@
       <div class="progress-container">
           <div class="progress-bar" id="progressBar"></div>
       </div>
-  </div>-->
+    </div>-->
 
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
@@ -59,6 +59,10 @@
         <div class="chat" id="chat">
           <i class="fa-solid fa-house"></i>
           <span id="text" class="text">Home</span>
+        </div>
+        <div class="feed" id="feed">
+          <i class="fa-regular fa-circle-play"></i>
+          <span id="text" class="text">Feed</span>
         </div>
         <div class="meme" id="meme">
           <i class="fa-solid fa-meteor"></i>
@@ -140,17 +144,24 @@
         <h1>Games</h1>
         <img src="./SVGs/cross.svg" class="remove-games-button" id="remove-games" onclick="app.removeGames()">
       </div>
-      <div class="games-main">
+      <!--<div class="games-main">
         <iframe src="https://zandenkoh.github.io/Collect/" loading="lazy"></iframe>
+      </div>-->
+      <div class="games-main">
+        <iframe src="./Menja/Menja.html" loading="lazy"></iframe>
       </div>
     </div>
 
-  <div id="spotify" class="spotify">
-    <div class="buttons">
-      <button id="btn_playlist_1" style="font-weight: 700;">roadtrip</button>
-      <button id="btn_playlist_2">Mood Booster</button>
-      <button id="btn_playlist_3">Study Music 2024</button>
-    </div>
+
+
+    
+
+    <div id="spotify" class="spotify">
+      <div class="buttons">
+        <button id="btn_playlist_1" style="font-weight: 700;">roadtrip</button>
+        <button id="btn_playlist_2">Mood Booster</button>
+        <button id="btn_playlist_3">Study Music 2024</button>
+      </div>
   
     <!--<div class="playlist" id="playlist_1" style="display: block;">
         <iframe src="https://open.spotify.com/embed/playlist/57n2yA9LLMEckqec4qkzJw?utm_source=generator&theme=0" width="100%" height="100%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>  
@@ -161,7 +172,7 @@
     <div class="playlist" id="playlist_3" style="display: none;">
         <iframe src="https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator&theme=0" width="100%" height="100%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>-->
-</div>
+    </div>
 
     <!-- New Rules popup -->
     <div id="rulesPopup" class="advertising-rules">
@@ -189,83 +200,83 @@
     </div>
     
 
-  <!-- New About popup -->
-  <div id="aboutPopup" class="advertising-about">
-    <div class="ads-content">
-      <img id="close-about-btn" class="close-ads-btn" onclick="app.toggleAboutPopup()" src="./SVGs/cross.svg">
-      <div class="ads-content-controls">
-        <h2>About</h2>
-      </div>
+      <!-- New About popup -->
+      <div id="aboutPopup" class="advertising-about">
+        <div class="ads-content">
+          <img id="close-about-btn" class="close-ads-btn" onclick="app.toggleAboutPopup()" src="./SVGs/cross.svg">
+          <div class="ads-content-controls">
+            <h2>About</h2>
+          </div>
+            
+            <!-- Image -->
+            <img class="about-image" src="./SVGs/ZNet Redesigned.png">
+
+            <!-- About Content -->
+            <p>Welcome to ZNet! This is a dedicated space for students to communicate, collaborate, and have fun! Whether you need to discuss homework, share ideas, or simply chat with friends, ZNet is designed to facilitate effective and enjoyable interaction.</p>
+            <p>It's mission is to enhance communication and collaboration among students. By providing a user-friendly and engaging environment, we aim to foster a sense of community and support among peers. Our vision is to create an online space where students feel connected and empowered to share their thoughts and experiences. Have fun! 😄</p>
+            <hr class="versions-hr">
+            <br>
         
-        <!-- Image -->
-        <img class="about-image" src="./SVGs/ZNet Redesigned.png">
-
-        <!-- About Content -->
-        <p>Welcome to ZNet! This is a dedicated space for students to communicate, collaborate, and have fun! Whether you need to discuss homework, share ideas, or simply chat with friends, ZNet is designed to facilitate effective and enjoyable interaction.</p>
-        <p>It's mission is to enhance communication and collaboration among students. By providing a user-friendly and engaging environment, we aim to foster a sense of community and support among peers. Our vision is to create an online space where students feel connected and empowered to share their thoughts and experiences. Have fun! 😄</p>
-        <hr class="versions-hr">
-        <br>
+            <!-- Features -->
+            <h3>Features</h3>
+            <p>Our platform is packed with features to ensure a dynamic and interactive experience:</p>
+            <p class="special-text"><b>Real-time Chat:</b> Engage in live conversations with classmates, share instant updates, and stay connected with group discussions.</p>
+            <p class="special-text"><b>Interactive Polls:</b> Participate in polls to share your opinions, make group decisions, and see what others think on various topics.</p>
+            <p class="special-text"><b>Fun Games:</b> Take a break from studies and enjoy a variety of games designed to entertain and challenge you.</p>
+            <!--<p class="special-text"><b>Customisable Profiles:</b> Personalise your profile with avatars, status updates, and more to express your unique personality.</p>-->
+            <p class="special-text"><b>Event Notifications:</b> Stay informed about upcoming events, deadlines, and important announcements with real-time notifications.</p>
+            <p class="special-text"><b>Secure Messaging:</b> Enjoy peace of mind with secure messaging that protects your conversations and personal information.</p>
+            <hr class="versions-hr">
+            <br>
         
-        <!-- Features -->
-        <h3>Features</h3>
-        <p>Our platform is packed with features to ensure a dynamic and interactive experience:</p>
-        <p class="special-text"><b>Real-time Chat:</b> Engage in live conversations with classmates, share instant updates, and stay connected with group discussions.</p>
-        <p class="special-text"><b>Interactive Polls:</b> Participate in polls to share your opinions, make group decisions, and see what others think on various topics.</p>
-        <p class="special-text"><b>Fun Games:</b> Take a break from studies and enjoy a variety of games designed to entertain and challenge you.</p>
-        <!--<p class="special-text"><b>Customisable Profiles:</b> Personalise your profile with avatars, status updates, and more to express your unique personality.</p>-->
-        <p class="special-text"><b>Event Notifications:</b> Stay informed about upcoming events, deadlines, and important announcements with real-time notifications.</p>
-        <p class="special-text"><b>Secure Messaging:</b> Enjoy peace of mind with secure messaging that protects your conversations and personal information.</p>
-        <hr class="versions-hr">
-        <br>
+            <!-- Creators and Contributors -->
+            <h3>Creators and Contributors</h3>
+            <p>This platform was created by me @Zanden ⚡, and I'm passionate about improving communication and collaboration within our school community. I have put in countless hours of coding, testing, and refining to ensure this platform meets the needs of everyone.</p>
+            <p>Special thanks to everyone for providing your invaluable feedback and support throughout the development process!</p>
+            <p>Based on the feedback collected so far, I have improved this platform significantly since its inception.</p>
+            <hr class="versions-hr">
+            <br>
+
+            <!-- Contact Information -->
+            <h3>Contact Information</h3>
+            <p>We value your feedback, and are here to help if you encounter any issues when using ZNet. You may reach out to us through email, or simply type "@ZNet" along with your feedback (Note that one method is more private than the other, so depending on your feedback, you might want to opt for the more private way of contacting us.)</p>
+            <p class="special-text">Email: znet@gmail.com</p>
+            <!--<p class="special-text">Support Forum: Visit our <a href="#">support forum</a> for community assistance and FAQs.</p>-->
+            <p class="special-text">Type "@ZNet" along with your feedback.</p>
+            <hr class="versions-hr">
+            <br>
         
-        <!-- Creators and Contributors -->
-        <h3>Creators and Contributors</h3>
-        <p>This platform was created by me @Zanden ⚡, and I'm passionate about improving communication and collaboration within our school community. I have put in countless hours of coding, testing, and refining to ensure this platform meets the needs of everyone.</p>
-        <p>Special thanks to everyone for providing your invaluable feedback and support throughout the development process!</p>
-        <p>Based on the feedback collected so far, I have improved this platform significantly since its inception.</p>
-        <hr class="versions-hr">
-        <br>
+            <!-- Version Information -->
+            <h3>Version Information</h3>
+            <p>We are committed to continuously improving the platform. Here is the current version:</p>
+            <p class="special-text"><b>Version 3.3.0: </b> We are excited to unveil the latest update to our platform, delivering a plethora of enhancements to elevate your user experience to new heights! In this release, we've introduced a wide array of innovative features, refined designs, and crucial bug fixes. Notable additions include interactive polls, allowing active engagement with peers; enjoyable games for a refreshing break; and a revamped members tab, facilitating seamless connections. Accompanied by design upgrades for enhanced aesthetics and usability, this update addresses reported bugs, ensuring a smoother experience. Users now enjoy improved navigation with class display functionality, a responsive design for seamless access across devices, and a grand new look for an elevated experience. Version 3.3.0 marks a significant stride in our ongoing commitment to excellence, enriching your interaction and fostering a vibrant community.</p>
+            <hr class="versions-hr">
+            <br>
 
-        <!-- Contact Information -->
-        <h3>Contact Information</h3>
-        <p>We value your feedback, and are here to help if you encounter any issues when using ZNet. You may reach out to us through email, or simply type "@ZNet" along with your feedback (Note that one method is more private than the other, so depending on your feedback, you might want to opt for the more private way of contacting us.)</p>
-        <p class="special-text">Email: znet@gmail.com</p>
-        <!--<p class="special-text">Support Forum: Visit our <a href="#">support forum</a> for community assistance and FAQs.</p>-->
-        <p class="special-text">Type "@ZNet" along with your feedback.</p>
-        <hr class="versions-hr">
-        <br>
+            <!--
+            <p>Version history:</p>
+            <p class="special-text"><b>Version 1.0.0:</b> ZNet's first release, introducing some core features. Users gain access to a real-time chat, laying the foundation for seamless communication and interaction within the community.</p>
+            <p class="special-text"><b>Version 1.1.0:</b> ZNet's first update. The page was redesigned to look even greater.</p>
+            <p class="special-text"><b>Version 1.3.0:</b> ZNet was updated with new bug fixes, and a brand new designs for messages, as well as a new login form.</p>
+            <p class="special-text"><b>Version 2.0.0:</b> Building upon the success of its debut, Version 2.0.0 brings forth significant enhancements and expansions. In this release, we introduce an interactive sidebar, allowing users to access it through a button found in the top righ of the screen. This sidebar serves as a major step in ZNet's progress, as it will  mark the start of the sidebar revolution (I'm literally not kidding, people actually loved the sidebar). This sidebar comes with 4 tabs: Meet, Games, Music, Feedback. To please your eyes, we have added a dark mode, allowing everything on this platform to gain a darker, fancier look.</p>
+            <p class="special-text"><b>Version 3.0.0:</b> Continuing our commitment to innovation and user satisfaction, Version 3.0.0 heralds a new era of functionality and refinement. In this milestone release, we introduce the eagerly anticipated Members Tab, facilitating seamless connections and community engagement. Users now have the ability to discover, connect, and collaborate with fellow members effortlessly, fostering a sense of belonging and camaraderie within the platform.</p>
+            <p class="special-text"><b>Version 3.1.0:</b> With Version 3.1.0, we take a step further in enhancing user experience and platform versatility. This release introduces exciting new features including enhanced class display functionality, offering users improved navigation and access to relevant information. Additionally, users can now enjoy a responsive design that adapts seamlessly to various devices, ensuring a consistent and optimal browsing experience across desktops, tablets, and mobile devices.</p>
+            <p class="special-text"><b>Version 3.2.0:</b> Version 3.2.0 represents a significant leap forward in our quest for excellence and innovation. In this release, we introduce a series of design upgrades aimed at enhancing visual appeal, usability, and overall aesthetics. From refined interface elements to streamlined user workflows, these enhancements elevate the platform's look and feel, providing users with an immersive and engaging browsing experience.</p>
+            <hr class="versions-hr">
+            <br>-->
+
+            <p><b>Upcoming Features: </b> We are working on adding more games, enhanced notification settings, and user-customisable themes in future updates.</p>
+            <p>Stay tuned for more exciting updates and new features!</p>
         
-        <!-- Version Information -->
-        <h3>Version Information</h3>
-        <p>We are committed to continuously improving the platform. Here is the current version:</p>
-        <p class="special-text"><b>Version 3.3.0: </b> We are excited to unveil the latest update to our platform, delivering a plethora of enhancements to elevate your user experience to new heights! In this release, we've introduced a wide array of innovative features, refined designs, and crucial bug fixes. Notable additions include interactive polls, allowing active engagement with peers; enjoyable games for a refreshing break; and a revamped members tab, facilitating seamless connections. Accompanied by design upgrades for enhanced aesthetics and usability, this update addresses reported bugs, ensuring a smoother experience. Users now enjoy improved navigation with class display functionality, a responsive design for seamless access across devices, and a grand new look for an elevated experience. Version 3.3.0 marks a significant stride in our ongoing commitment to excellence, enriching your interaction and fostering a vibrant community.</p>
-        <hr class="versions-hr">
-        <br>
-
-        <!--
-        <p>Version history:</p>
-        <p class="special-text"><b>Version 1.0.0:</b> ZNet's first release, introducing some core features. Users gain access to a real-time chat, laying the foundation for seamless communication and interaction within the community.</p>
-        <p class="special-text"><b>Version 1.1.0:</b> ZNet's first update. The page was redesigned to look even greater.</p>
-        <p class="special-text"><b>Version 1.3.0:</b> ZNet was updated with new bug fixes, and a brand new designs for messages, as well as a new login form.</p>
-        <p class="special-text"><b>Version 2.0.0:</b> Building upon the success of its debut, Version 2.0.0 brings forth significant enhancements and expansions. In this release, we introduce an interactive sidebar, allowing users to access it through a button found in the top righ of the screen. This sidebar serves as a major step in ZNet's progress, as it will  mark the start of the sidebar revolution (I'm literally not kidding, people actually loved the sidebar). This sidebar comes with 4 tabs: Meet, Games, Music, Feedback. To please your eyes, we have added a dark mode, allowing everything on this platform to gain a darker, fancier look.</p>
-        <p class="special-text"><b>Version 3.0.0:</b> Continuing our commitment to innovation and user satisfaction, Version 3.0.0 heralds a new era of functionality and refinement. In this milestone release, we introduce the eagerly anticipated Members Tab, facilitating seamless connections and community engagement. Users now have the ability to discover, connect, and collaborate with fellow members effortlessly, fostering a sense of belonging and camaraderie within the platform.</p>
-        <p class="special-text"><b>Version 3.1.0:</b> With Version 3.1.0, we take a step further in enhancing user experience and platform versatility. This release introduces exciting new features including enhanced class display functionality, offering users improved navigation and access to relevant information. Additionally, users can now enjoy a responsive design that adapts seamlessly to various devices, ensuring a consistent and optimal browsing experience across desktops, tablets, and mobile devices.</p>
-        <p class="special-text"><b>Version 3.2.0:</b> Version 3.2.0 represents a significant leap forward in our quest for excellence and innovation. In this release, we introduce a series of design upgrades aimed at enhancing visual appeal, usability, and overall aesthetics. From refined interface elements to streamlined user workflows, these enhancements elevate the platform's look and feel, providing users with an immersive and engaging browsing experience.</p>
-        <hr class="versions-hr">
-        <br>-->
-
-        <p><b>Upcoming Features: </b> We are working on adding more games, enhanced notification settings, and user-customisable themes in future updates.</p>
-        <p>Stay tuned for more exciting updates and new features!</p>
-        
-        <footer style="text-align: center; margin-top: 80px; user-select: none;">
-          <p>&copy; 2024 ZNet. All rights reserved.</p>
-      </footer>
-    </div>
-</div>
+            <footer style="text-align: center; margin-top: 80px; user-select: none;">
+              <p>&copy; 2024 ZNet. All rights reserved.</p>
+            </footer>
+          </div>
+        </div>
 
 
 
-  <div class="overlay" id="overlay" style="z-index: 8000;"></div>
+        <div class="overlay" id="overlay" style="z-index: 8000;"></div>
 
   <div class="forms" id="forms">
     <!--<iframe
