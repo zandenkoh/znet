@@ -811,6 +811,24 @@ body {
   background: #e4e4e4;
 }
 
+.feed {
+  color: var(--buttons, #646464);
+  font-size: 16px;
+  padding: 12px 14px;
+  padding-left: 16px;
+  animation: var(--meet-animation, none 1s infinite);
+  border-radius: 8px;
+  white-space: nowrap;
+  position: relative;
+}
+
+.feed:hover {
+  color: var(--buttons-hover, #646464);
+  cursor: pointer;
+  transform: scale(1);
+  background: #eaeaea;
+}
+
 .meme {
   color: var(--buttons, #646464);
   font-size: 16px;
@@ -2453,3 +2471,37 @@ body {
   background: #0056b3;
 }*/
 
+.notification-popup {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+}
+
+.notification-text {
+  margin-left: 10px;
+}
+
+.notification-text span {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.notification-text p {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+}
