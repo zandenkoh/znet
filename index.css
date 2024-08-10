@@ -2383,7 +2383,7 @@ body {
 
 .close-ads-btn {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   cursor: pointer;
   font-size: 30px;
@@ -2401,11 +2401,11 @@ body {
 }
 
 .dump-coming-soon {
-  width: 700px;
-  height: 400px;
-  padding: 10px;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 0;
   display: none;
   z-index: 9999;
   position: fixed;
@@ -2414,11 +2414,38 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.dump-header {
+  width: 100%;
+  text-align: center;
+  height: 60px;
+  padding-top: 0;
+  border-bottom: 1px solid #0000003b;
+  z-index: 7003;
+}
+
+.dump-header h1 {
+  font-family: "Darker Grotesque", sans-serif;
+  font-size: 38px;
+  font-weight: 300;
+  margin-top: -4px;
+}
+
 .dump-coming-soon-img {
   width: 100%;
   height: 100%;
   border-radius: 10px;
   object-fit: cover;
+}
+
+.dump-main {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.dump-main iframe {
+  width: 100%;
+  height: calc(100% - 60px);
 }
 
 /*
