@@ -1,37 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
-  document.style.zoom = "90%";
   // Get the close button and advertisement elements
   var closeBtn = document.getElementById("closeBtn");
   var advertisement = document.getElementById("advertisement");
   var progressBar = document.getElementById("progressBar");
-
-  // Close the advertisement when close button is clicked
-  closeBtn.addEventListener("click", function() {
-      advertisement.style.display = "none";
-  });
-
-  // Automatically close the advertisement after 5 seconds
-  setTimeout(function() {
-      advertisement.style.display = "none";
-  }, 10000);
-
-  // Update the progress bar
-  var width = 1;
-  var interval = setInterval(function() {
-      if (width >= 100) {
-          clearInterval(interval);
-      } else {
-          width++;
-          progressBar.style.width = width + "%";
-      }
-  }, 46); // Adjust the speed of the progress bar here
-}); 
-
-document.addEventListener("DOMContentLoaded", function() {
-  // Get the close button and advertisement elements
-  var closeBtn = document.getElementById("closeBtn");
-  var advertisement = document.getElementById("advertisement");
-  var progressBar = document.getElementById("progressBar");
+  var overlayad = document.getElementById("overlay");
 
   // Close the advertisement when close button is clicked
   closeBtn.addEventListener("click", function() {
@@ -1433,6 +1405,23 @@ pOverlay.addEventListener('click', () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // GET THAT MEMECHAT HEADER OUTTA HERE
         var title_container = document.getElementById('title_container')
         var title = document.getElementById('title')
@@ -1703,6 +1692,18 @@ setupSidebarFollowersCount(sidebarfollowerName);
           isGame = true;
           sidebar_icon.style.display = 'block';
         });
+
+        var removeDumpButton = document.getElementById('remove-dump');
+        removeDumpButton.addEventListener('click', function() {
+          dump.style.display = 'block';
+          dump.style.background = '';
+          dump.style.paddingLeft = '';
+          dumpPopup.style.display = 'none';
+          isDump = false;
+          chat_input_container.style.display = '';
+          sidebar_icon.style.display = 'block';
+          overlay.style.display = 'none';
+        });
         
         /*var game = document.getElementById('meet');
         var games = document.getElementById('games');
@@ -1734,8 +1735,8 @@ setupSidebarFollowersCount(sidebarfollowerName);
           dumpPopup.style.display = 'block';
           isDump = false;
           sidebar_icon.style.display = 'none';
-          overlay.style.display = 'block';
-          overlay.style.zIndex = '9996';
+          overlay.style.display = 'none';
+          overlay.style.zIndex = '0';
           /*window.location.href = './Polls/polls.html';*/
         });
 
