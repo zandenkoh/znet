@@ -1060,6 +1060,20 @@ function createProfileCircle(name) {
   return profileCircle;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Create the participants button
 var participantsButton = document.getElementById('users');
 var participantsButtonText = participantsButton.querySelector('.text');
@@ -1195,7 +1209,7 @@ function filterParticipantsList(searchTerm) {
 }
 
 // Function to update the participants list
-function updateParticipantsList(usersData) {
+/*function updateParticipantsList(usersData) {
   const users = Object.keys(usersData);
 
   // Sort users by class
@@ -1337,7 +1351,253 @@ function updateParticipantsList(usersData) {
 
     participantsList.appendChild(listItem);
   });
+}*/
+
+
+// Update the current user's status in Firebase
+function updateCurrentUserStatus() {
+  const userName = localStorage.getItem('name'); // Retrieve name from localStorage
+  if (!userName) {
+    console.error('No user name found in localStorage');
+    return;
+  }
+
+  // Find the user's ID based on the name
+  db.ref('users').once('value').then((snapshot) => {
+    const usersData = snapshot.val();
+    let userId = null;
+
+    for (const [key, value] of Object.entries(usersData)) {
+      if (value.name === userName) {
+        userId = key;
+        break;
+      }
+    }
+
+    if (!userId) {
+      console.error('User not found in Firebase');
+      return;
+    }
+
+    const userRef = db.ref(`users/${userId}`);
+
+    // Set the user to online and handle disconnection
+    userRef.update({ isOnline: true });
+    userRef.onDisconnect().update({
+      isOnline: false,
+      lastSeen: Date.now(),
+    });
+  }).catch((error) => {
+    console.error('Error fetching users:', error);
+  });
 }
+
+// Call this function when the page loads
+updateCurrentUserStatus();
+
+// Function to update the participants list
+function updateParticipantsList(usersData) {
+  const users = Object.keys(usersData);
+
+  // Sort users: online first, then by follower count
+  users.sort((userKey1, userKey2) => {
+    const user1 = usersData[userKey1];
+    const user2 = usersData[userKey2];
+    const isOnline1 = user1.isOnline ? 1 : 0;
+    const isOnline2 = user2.isOnline ? 1 : 0;
+
+    if (isOnline1 !== isOnline2) {
+      return isOnline2 - isOnline1; // Online users first
+    }
+    const followersCount1 = user1.followers ? Object.keys(user1.followers).length : 0;
+    const followersCount2 = user2.followers ? Object.keys(user2.followers).length : 0;
+    return followersCount2 - followersCount1; // Sort by follower count
+  });
+
+  const numParticipants = users.length;
+
+  // Update the participants button text
+  participantsButtonText.innerHTML = `Members | ${numParticipants}`;
+  participantsTitle.innerHTML = `${numParticipants} Members`;
+
+  // Update the participants list
+  participantsList.innerHTML = '';
+  participantsList.style.zIndex = '5';
+
+  users.forEach((userKey) => {
+    const userData = usersData[userKey];
+    const listItem = document.createElement('li');
+    listItem.style.display = 'flex';
+    listItem.style.alignItems = 'center';
+    listItem.style.marginBottom = '15px';
+    listItem.style.fontSize = '14px';
+    listItem.classList.add('user-list');
+
+    const profileCircle = createProfileCircle(userData.name);
+    
+    // Add the green dot for online users
+    if (userData.isOnline) {
+      addOnlineDot(profileCircle);
+    }
+  
+    listItem.appendChild(profileCircle);
+
+
+
+    const userName = document.createElement('span');
+    userName.textContent = userData.name;
+    userName.classList.add('user-name');
+    listItem.appendChild(userName);
+
+    const userClass = document.createElement('span');
+    userClass.textContent = userData.class;
+    userClass.classList.add('user-class');
+    listItem.appendChild(userClass);
+
+const statusText = document.createElement('span');
+if (userData.isOnline) {
+  statusText.textContent = 'Online';
+  statusText.style.color = '#0199fe';
+} else if (userData.lastSeen) {
+  const lastSeen = new Date(userData.lastSeen).toLocaleString();
+  statusText.textContent = `Last seen: ${lastSeen}`;
+  statusText.style.color = '#666';
+} else {
+  statusText.textContent = ''; // Leave blank if lastSeen is not available
+}
+statusText.style.marginLeft = '10px';
+statusText.style.fontSize = '12px';
+statusText.style.marginTop = '5px';
+listItem.appendChild(statusText);
+
+
+    const followUser = document.createElement('button');
+    followUser.textContent = 'Follow';
+    followUser.classList.add('follow-user');
+    listItem.appendChild(followUser);
+
+    const followerName = localStorage.getItem('name');
+
+    if (userData.followers && userData.followers[followerName]) {
+      followUser.textContent = 'Following';
+      followUser.classList.remove('follow-user');
+      followUser.classList.add('following-user');
+    }
+
+    followUser.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const userId = userKey;
+      const followersRef = db.ref(`users/${userId}/followers/${followerName}`);
+
+      if (followUser.textContent === 'Follow') {
+        followersRef.set(true).then(() => {
+          followUser.textContent = 'Following';
+          followUser.classList.remove('follow-user');
+          followUser.classList.add('following-user');
+        }).catch((error) => {
+          console.error('Error updating followers:', error);
+        });
+      } else {
+        followersRef.remove().then(() => {
+          followUser.textContent = 'Follow';
+          followUser.classList.remove('following-user');
+          followUser.classList.add('follow-user');
+        }).catch((error) => {
+          console.error('Error updating followers:', error);
+        });
+      }
+    });
+
+    listItem.addEventListener('click', () => {
+      participantsTitle.style.display = 'none';
+      searchInput.style.display = 'none';
+      participantsLine.style.display = 'none';
+      participantsList.style.display = 'none';
+      profilePage.style.display = 'block';
+
+      var hue = (userData.name.charCodeAt(0) * 137.508) % 360;
+      hue = (hue + 200) % 360;
+      proCircle.textContent = userData.name.charAt(0).toUpperCase();
+      proCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`;
+      proName.textContent = userData.name;
+
+      var followersCount = userData.followers ? Object.keys(userData.followers).length : 0;
+      profileFollowers.textContent = `${followersCount} followers`;
+
+      if (userData.followers && userData.followers[followerName]) {
+        profileFollowButton.textContent = 'Following';
+        profileFollowButton.classList.remove('profile-follow-user');
+        profileFollowButton.classList.add('profile-following-user');
+      } else {
+        profileFollowButton.textContent = 'Follow';
+        profileFollowButton.classList.remove('profile-following-user');
+        profileFollowButton.classList.add('profile-follow-user');
+      }
+
+      profileFollowButton.onclick = () => {
+        const followersRef = db.ref(`users/${userKey}/followers/${followerName}`);
+
+        if (profileFollowButton.textContent === 'Follow') {
+          followersRef.set(true).then(() => {
+            profileFollowButton.textContent = 'Following';
+            profileFollowButton.classList.remove('profile-follow-user');
+            profileFollowButton.classList.add('profile-following-user');
+            updateFollowersCount(userKey);
+          }).catch((error) => {
+            console.error('Error updating followers:', error);
+          });
+        } else {
+          followersRef.remove().then(() => {
+            profileFollowButton.textContent = 'Follow';
+            profileFollowButton.classList.remove('profile-following-user');
+            profileFollowButton.classList.add('profile-follow-user');
+            updateFollowersCount(userKey);
+          }).catch((error) => {
+            console.error('Error updating followers:', error);
+          });
+        }
+      };
+    });
+
+    participantsList.appendChild(listItem);
+  });
+}
+
+
+// Function to create the green dot for online status
+function addOnlineDot(profileCircle) {
+  const onlineDot = document.createElement('div');
+  onlineDot.style.width = '10px';
+  onlineDot.style.height = '10px';
+  onlineDot.style.background = '#0199fe';
+  onlineDot.style.borderRadius = '50%';
+  onlineDot.style.position = 'absolute';
+  onlineDot.style.bottom = '1px';
+  onlineDot.style.right = '1px';
+  profileCircle.appendChild(onlineDot);
+}
+
+var style = document.createElement('style');
+style.innerHTML = `
+  .profile-circle {
+    position: relative; /* Add position relative to contain the green dot */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  .user-list {
+    cursor: pointer;
+  }
+`;
+document.head.appendChild(style);
 
 
 
@@ -2091,21 +2351,42 @@ setupSidebarFollowersCount(sidebarfollowerName);
         //chat_logout.textContent = `${parent.get_name()} | Logout, <i class="fa-solid fa-right-from-bracket"></i>`
         chat_logout.innerHTML = `<img src="./SVGs/logour.svg" class="logout-icon-button"> Log out`;
         // "Logout" is really just deleting the name from the localStorage
-        chat_logout.onclick = function(){
-          // In the 'delete_all_messages()' function (or a similar function)
-          var userName = app.get_name();
-          db.ref('users/' + userName).remove()
-          .then(function() {
-            console.log('User removed from the database');
-          })
-          .catch(function(error) {
-            console.error('Error removing user from the database:', error);
-          });
-          localStorage.clear();
-          // Go back to home page
-          //window.location.reload();
-          parent.home();
-        }
+        
+        
+        // Get elements
+const logoutModal = document.getElementById('logoutModal');
+const cancelButton = document.getElementById('cancelButton');
+const logoutConfirmButton = document.getElementById('logoutConfirmButton');
+
+// Show modal on logout click
+chat_logout.onclick = function () {
+  logoutModal.style.display = 'flex'; // Show the modal
+}
+
+// Hide modal if cancel is clicked
+cancelButton.onclick = function () {
+  logoutModal.style.display = 'none'; // Hide the modal
+}
+
+// Proceed with logout when Logout button is clicked
+logoutConfirmButton.onclick = function () {
+  var userName = app.get_name();
+  db.ref('users/' + userName).remove()
+    .then(function () {
+      console.log('User removed from the database');
+    })
+    .catch(function (error) {
+      console.error('Error removing user from the database:', error);
+    });
+  localStorage.clear();
+  
+  // Close the modal and proceed with logout
+  logoutModal.style.display = 'none';
+  
+  // Go back to home page
+  parent.home();
+}
+
 
         sidebar.append(chat_logout_container)
         chat_logout_container.append(chat_logout)
@@ -2197,7 +2478,9 @@ setupSidebarFollowersCount(sidebarfollowerName);
           typingIndicator.style.borderRadius = '10px';
           typingIndicator.style.padding = '5px 10px';
           typingIndicator.style.paddingRight = '30px';
-          typingIndicator.style.marginLeft = '-47%';
+          typingIndicator.style.left = '10%';
+
+          //typingIndicator.style.marginLeft = '-65%';
           // Append the typing indicator to the typing indicator container
           chat_input_container.appendChild(typingIndicator);
         }
