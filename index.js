@@ -222,7 +222,7 @@ window.onload = function() {
           // Set the custom message data in the database
           var customMessageData = {
             name: "ZNet",
-            message: "Nigga what u want",
+            message: "***** what u want",
             timestamp: timestamp,
             index: index,
             sender: "ZNet_System",
@@ -797,21 +797,20 @@ document.title = `ZNet`;
 
         var banButton = document.createElement('button');
         banButton.setAttribute('id', 'ban_button');
-        banButton.innerHTML = '<i class="fa-solid fa-user-slash"></i>';
-        banButton.style.right = '11px';
-        banButton.style.top = '11px';
-        banButton.style.width = '45px';
-        banButton.style.height = '45px';
-        banButton.style.fontSize = '14px';
+        banButton.innerHTML = '';
+        banButton.style.right = '0px';
+        banButton.style.top = '0px';
+        banButton.style.width = '10px';
+        banButton.style.height = '10px';
+        banButton.style.fontSize = '1px';
         banButton.style.zIndex = '120';
         //banButton.style.transform = 'translate(-50%, -50%)';
         banButton.style.position = 'absolute';
         banButton.style.color = '#000';
         banButton.style.background = '#fff';
-        banButton.style.border = '1px solid #000';
-        banButton.style.borderRadius = '10px';
+        banButton.style.border = '0px solid #000';
+        banButton.style.borderRadius = '0';
         banButton.style.transition = '0.6s ease';
-        banButton.style.display = 'none';
 
         banButton.addEventListener('click', () => {
           // Get the username of the user to be banned
@@ -1152,21 +1151,28 @@ proCircle.style.marginLeft = '10px';
 
 
 var proName = document.createElement('h2');
-proName.style.fontSize = '18px';
-proName.style.marginBottom = '10px';
+proName.style.fontSize = '22px';
+proName.style.marginBottom = '-4px';
+
+var openStatusText = document.createElement('span');
+
+openStatusText.style.marginLeft = '0';
+openStatusText.style.fontSize = '14px';
+openStatusText.style.fontWeight = '400';
 
 var profileFollowers = document.createElement('p');
 profileFollowers.style.fontSize = '16px';
 profileFollowers.style.color = '#666';
 profileFollowers.style.textAlign = 'center';
+profileFollowers.style.marginTop = '15px';
 
 var profileFollowButton = document.createElement('button');
-profileFollowButton.style.marginTop = '30px';
+profileFollowButton.style.marginTop = '10px';
 profileFollowButton.style.padding = '8px 35px';
 profileFollowButton.style.fontSize = '15px';
 profileFollowButton.classList.add('profile-follow-user');
 
-profilePage.append(proCircle, proName, profileFollowers, profileFollowButton);
+profilePage.append(proCircle, proName, openStatusText, profileFollowers, profileFollowButton);
 
 participantsPopup.appendChild(profilePage);
 
@@ -1415,10 +1421,20 @@ function updateParticipantsList(usersData) {
   });
 
   const numParticipants = users.length;
+  
+  let onlineCount = 0;
+  users.forEach(userKey => {
+    if (usersData[userKey].isOnline) {
+      onlineCount++;
+    }
+  });
+
+  // Update the participantsTitle with the total participants and online count
+  participantsTitle.innerHTML = `${numParticipants} Members | ${onlineCount} Online`;
 
   // Update the participants button text
   participantsButtonText.innerHTML = `Members | ${numParticipants}`;
-  participantsTitle.innerHTML = `${numParticipants} Members`;
+  //participantsTitle.innerHTML = `${numParticipants} Members`;
 
   // Update the participants list
   participantsList.innerHTML = '';
@@ -1456,12 +1472,32 @@ function updateParticipantsList(usersData) {
 
 const statusText = document.createElement('span');
 if (userData.isOnline) {
-  statusText.textContent = 'Online';
-  statusText.style.color = '#0199fe';
+  statusText.textContent = '';
+  userName.style.color = '#0199fe';
 } else if (userData.lastSeen) {
-  const lastSeen = new Date(userData.lastSeen).toLocaleString();
-  statusText.textContent = `Last seen: ${lastSeen}`;
+  const now = new Date();
+  const lastSeenDate = new Date(userData.lastSeen);
+
+  // Calculate the difference in days
+  const msInDay = 24 * 60 * 60 * 1000;
+  const daysDifference = Math.floor((now - lastSeenDate) / msInDay);
+
+  let lastSeenFormatted;
+
+  // Check if the lastSeen is within the past 7 days
+  if (daysDifference < 7) {
+  // Format as "Day hh:mm AM/PM"
+    const options = { weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: true };
+    lastSeenFormatted = lastSeenDate.toLocaleString('en-GB', options);
+  } else {
+  // Format as "1 January"
+    const options = { day: 'numeric', month: 'long' };
+    lastSeenFormatted = lastSeenDate.toLocaleString('en-GB', options);
+  }
+
+  statusText.textContent = `Last seen: ${lastSeenFormatted}`;
   statusText.style.color = '#666';
+
 } else {
   statusText.textContent = ''; // Leave blank if lastSeen is not available
 }
@@ -1515,11 +1551,42 @@ listItem.appendChild(statusText);
       participantsList.style.display = 'none';
       profilePage.style.display = 'block';
 
-      var hue = (userData.name.charCodeAt(0) * 137.508) % 360;
+      var hue = (userData.name.charCodeAt(0) * 137.508) % 200;
       hue = (hue + 200) % 360;
       proCircle.textContent = userData.name.charAt(0).toUpperCase();
       proCircle.style.backgroundColor = `hsl(${hue}, 70%, 70%)`;
       proName.textContent = userData.name;
+      
+if (userData.isOnline) {
+  openStatusText.textContent = 'Online';
+  openStatusText.style.color = '#0199fe';
+} else if (userData.lastSeen) {
+  const openNow = new Date();
+  const openLastSeenDate = new Date(userData.lastSeen);
+
+  // Calculate the difference in days
+  const msInDay = 24 * 60 * 60 * 1000;
+  const openDaysDifference = Math.floor((openNow - openLastSeenDate) / msInDay);
+
+  let openLastSeenFormatted;
+
+  // Check if the lastSeen is within the past 7 days
+  if (openDaysDifference < 7) {
+  // Format as "Day hh:mm AM/PM"
+    const options = { weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: true };
+    openLastSeenFormatted = openLastSeenDate.toLocaleString('en-GB', options);
+  } else {
+  // Format as "1 January"
+    const options = { day: 'numeric', month: 'long' };
+    openLastSeenFormatted = openLastSeenDate.toLocaleString('en-GB', options);
+  }
+
+  openStatusText.textContent = `Last seen: ${openLastSeenFormatted}`;
+  openStatusText.style.color = '#666';
+
+} else {
+  openStatusText.textContent = ''; // Leave blank if lastSeen is not available
+}
 
       var followersCount = userData.followers ? Object.keys(userData.followers).length : 0;
       profileFollowers.textContent = `${followersCount} followers`;
@@ -1567,13 +1634,14 @@ listItem.appendChild(statusText);
 // Function to create the green dot for online status
 function addOnlineDot(profileCircle) {
   const onlineDot = document.createElement('div');
-  onlineDot.style.width = '10px';
-  onlineDot.style.height = '10px';
+  onlineDot.style.width = '12px';
+  onlineDot.style.height = '12px';
   onlineDot.style.background = '#0199fe';
   onlineDot.style.borderRadius = '50%';
   onlineDot.style.position = 'absolute';
-  onlineDot.style.bottom = '1px';
-  onlineDot.style.right = '1px';
+  onlineDot.style.border = '3px solid #fff';
+  onlineDot.style.bottom = '0';
+  onlineDot.style.right = '0';
   profileCircle.appendChild(onlineDot);
 }
 
@@ -1699,7 +1767,7 @@ pOverlay.addEventListener('click', () => {
         chat_content_container.setAttribute('id', 'chat_content_container')
         chat_content_container.style.marginTop = '10vh';
         chat_content_container.style.height = '90vh';
-        chat_content_container.style.paddingTop = '30px';
+        chat_content_container.style.paddingTop = '6px';
 
         var chat_input_container = document.createElement('div')
         chat_input_container.setAttribute('id', 'chat_input_container')
