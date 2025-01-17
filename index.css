@@ -497,8 +497,8 @@ body {
   font-family: 'Varela Round', sans-serif;
   padding-left: 50px;
   padding-right: 50px;
-  padding-top: 15px;
-  padding-bottom: 90px;
+  padding-top: 0;
+  padding-bottom: 110px;
   margin-top: 0px;
   font-weight: bolder;
   z-index: 10000;
@@ -621,7 +621,6 @@ body {
 }
 
 #ban_button:hover {
-  cursor: pointer;
 }
 
 #participants_popup::-webkit-scrollbar {
@@ -1098,7 +1097,7 @@ body {
 #profile_page .profile-circle {
   width: 80px;
   height: 80px;
-  font-size: 24px;
+  font-size: 28px;
   margin-top: 80px;
 }
 
@@ -1701,7 +1700,7 @@ body {
 
 .message_user_container {
   position: sticky;
-  top: -30px;
+  top: -7px;
   background: #fff;
   justify-content: center;
   align-items: center;
@@ -2221,8 +2220,8 @@ body {
 .advertising-about {
   font-family: 'Varela Round';
   position: absolute;
-  height: calc(100vh - 100px);
-  width: calc(100vw - 100px);
+  height: calc(100% - 50px);
+  width: 750px;
   background-color: #ffffff;
   border-radius: 20px;
   overflow-x: hidden;
@@ -2241,7 +2240,7 @@ body {
 .advertising-about .ads-content {
   margin: 0 auto;
   position: relative;
-  padding: 0 150px 30px 150px;
+  padding: 0 75px 30px 75px;
 }
 
 .ads-content-controls {
